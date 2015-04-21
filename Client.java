@@ -70,7 +70,7 @@ public class Client extends JFrame
 
     private boolean O;
     private boolean gameOver;
-    private int font = 30;
+    private int font = 20;
 
     public Client()
     {
@@ -81,19 +81,19 @@ public class Client extends JFrame
 
         //Get content pane
         content=getContentPane();
-        content.setBackground(Color.blue.darker());
+        content.setBackground(Color.blue.darker().darker());
 
         //Set layout
         content.setLayout(new GridLayout(3,3));
 
         title=new JLabel("Mafia!", SwingConstants.CENTER);
-        title.setForeground(Color.red);
+        title.setForeground(Color.white);
         title.setFont(new Font("Arial",0, font));
         content.add(title);
 
         result=new JLabel("<html></html>", SwingConstants.LEFT);
         result.setVerticalAlignment(JLabel.BOTTOM);
-        result.setForeground(Color.red);
+        result.setForeground(Color.white);
         result.setFont(new Font("Arial",0, font));
         content.add(result);
 

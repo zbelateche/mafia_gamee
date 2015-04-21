@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.params=client
+comment0.target=clientThread(Client)
+comment1.params=
+comment1.target=void\ run()
+comment2.params=msg
+comment2.target=void\ tellServer(java.lang.String)
+comment3.params=
+comment3.target=Client()
+comment4.params=
+comment4.target=void\ init()
+comment5.params=arg
+comment5.target=void\ update(java.lang.String)
+comment6.params=args
+comment6.target=void\ main(java.lang.String[])
+numComments=7

@@ -20,6 +20,8 @@ public class Cohort
     public boolean killed=false;//the name of the person the mafia have killed
     public String killedWill=null;//the person mafia's killed's will 
     
+    public String pass;
+    
     public int votes=0;
     public ArrayList<String> toKill = new ArrayList<String>();
     public ArrayList<ServerThread> voted = new ArrayList<ServerThread>();
@@ -29,10 +31,11 @@ public class Cohort
     
     public static final String ANSI_RESET="\u001B[0m";
     public static final String ANSI_BLUE="\u001B[34m";
-    public Cohort(String name)
+    public Cohort(String name, String password)
     {
         teamName=name;
         teamMates = new ArrayList<ServerThread>();
+        pass = password;
     }
 
     public boolean add(ServerThread cl)

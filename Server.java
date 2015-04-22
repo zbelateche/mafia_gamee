@@ -49,10 +49,8 @@ class ServerThread implements Runnable {
             this.out.println("Welcome to Online Mafia!");
             this.out.println("Enter your name:");
             this.out.println(" ");
-            
-            
+
             name = this.in.readLine();
-            
             if (name == null) {
                 this.in.close();
                 this.out.close();
@@ -102,26 +100,28 @@ class ServerThread implements Runnable {
 
                 if(cmds[0].toLowerCase().equals("join"))
                 {
-                     
+
                     for(Cohort t: ServerThread.cohorts)
                     {
                         if(t.getID().toLowerCase().equals(cmds[1].toLowerCase()))
                         {
-                            
-                            for(ServerThread a : t.teamMates)
-                            {
-                                if(this.getName().toLowerCase().equals(a.getName().toLowerCase())){
-                                    this.out.println("Somebody already has that name. We'll call you "+ this.getName()+"2");
-                                 this.name=this.getName()+"2";
+                            this.out.println("Enter Password:");
+                            String pass = this.in.readLine();
+                            if(pass.equals(t.pass)){
+                                for(ServerThread a : t.teamMates)
+                                {
+                                    if(this.getName().toLowerCase().equals(a.getName().toLowerCase())){
+                                        this.out.println("Somebody already has that name. We'll call you "+ this.getName()+"2");
+                                        this.name=this.getName()+"2";
+                                    }
                                 }
+
+                                t.add(this);
+                                this.cohort = t;
+
+                                horted = true;
+                                break horting;
                             }
-                            
-                            t.add(this);
-                            this.cohort = t;
-                            
-                            
-                            horted = true;
-                            break horting;
                         }
                     }
                     this.out.println("There isn't a game with that name.");
@@ -140,7 +140,9 @@ class ServerThread implements Runnable {
                     }
                     if(!another)
                     {
-                        cohort = new Cohort(cmds[1]);
+                        this.out.println("Choose a password:");
+                        String pass = this.in.readLine();
+                        cohort = new Cohort(cmds[1], pass);
                         cohort.add(this);
                         ServerThread.cohorts.add(cohort);
                         horted = true;
@@ -234,9 +236,9 @@ class ServerThread implements Runnable {
                 if (cohort==null)
                 {
                     this.in.close();
-                        this.out.close();
-                        this.socket.close();
-                        return;
+                    this.out.close();
+                    this.socket.close();
+                    return;
                 }
                 /* If null, connection is closed, so just finish */
                 if (fromClient == null || fromClient.toLowerCase().equals("exit")||fromClient.toLowerCase().equals("leave")) {
@@ -269,10 +271,10 @@ class ServerThread implements Runnable {
                             cohort.tellAdmin("As admin, start the game again with start");
                             cohort. stop();
                         }
-                        
+
                         this.cohort = null;
                     }
-                              
+
                     this.cohortMenu();
                     if(fromClient.toLowerCase().equals("exit")||!cohort.isStarted())
                     {
@@ -333,13 +335,13 @@ class ServerThread implements Runnable {
                     /*
                     if (doc && !dead)
                     {
-                        if(cohort != null){cohort.sayDoc(name + ": "+ fromClient, this);}
+                    if(cohort != null){cohort.sayDoc(name + ": "+ fromClient, this);}
                     }
                     if(polt && !dead)
                     {
-                        if(cohort != null){cohort.sayPolt(name +": " +fromClient, this);}
+                    if(cohort != null){cohort.sayPolt(name +": " +fromClient, this);}
                     }
-                    */
+                     */
                     if(input[0].equals("save") && doc && !dead)
                     {
                         save(input[1]);
@@ -503,7 +505,7 @@ class ServerThread implements Runnable {
         this.out.println(" ");
 
     }
-    
+
     public void makeDoctor()
     {
         doc = true;

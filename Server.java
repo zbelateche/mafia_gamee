@@ -28,8 +28,6 @@ class ServerThread implements Runnable {
     public boolean investigated=false;
     public boolean detective=false;
 
-    public static final String ANSI_RESET="\u001B[0m";
-    public static final String ANSI_BLUE="\u001B[34m";
     public ServerThread(Socket socket, int ident) {
         /* Assign local variable */
         this.socket = socket;
@@ -210,7 +208,7 @@ class ServerThread implements Runnable {
 
     public void setWill(String msg){
         will=msg;
-        this.out.println(ANSI_BLUE+"Your new will is: "+msg+ ANSI_RESET);
+        this.out.println("Your new will is: "+msg);
         this.out.println(" ");
     }
 
@@ -254,7 +252,7 @@ class ServerThread implements Runnable {
                         cohort.remove(this);
                         if (cohort.isStarted() && cohort.mafia==0)
                         {   
-                            cohort.broadcast(ANSI_BLUE+"The last Mafia has left.The villagers win!"+ANSI_RESET);
+                            cohort.broadcast( "The last Mafia has left.The villagers win!"  );
                             cohort.tellAdmin("As admin, start the game again with start");
                             cohort.stop();
                         } 
@@ -267,7 +265,7 @@ class ServerThread implements Runnable {
                         cohort.remove(this);
                         if( cohort.isStarted() && cohort.villager==0)
                         {
-                            cohort.broadcast(ANSI_BLUE+ "The last villager has left.The mafia win!"+ANSI_RESET);
+                            cohort.broadcast(  "The last villager has left.The mafia win!"  );
                             cohort.tellAdmin("As admin, start the game again with start");
                             cohort. stop();
                         }
@@ -365,8 +363,8 @@ class ServerThread implements Runnable {
                         if(!a){this.out.println("They're already dead. Choose again.");}
                         else
                         {
-                            cohort.sayAll((ANSI_BLUE+this.getName() + " voted for " + input[1] + "!"+ANSI_RESET), this);
-                            this.out.println(ANSI_BLUE+"Thanks for voting for "+ input[1]+"!"+ANSI_RESET);
+                            cohort.sayAll(( this.getName() + " voted for " + input[1] + "!"  ), this);
+                            this.out.println( "Thanks for voting for "+ input[1]+"!"  );
                             this.out.println(" ");
                         }
                     }
@@ -384,7 +382,7 @@ class ServerThread implements Runnable {
     {
         cohort = null;
         this.out.println(" ");
-        this.out.println(ANSI_BLUE+"You have been kicked from the game."+ANSI_RESET);
+        this.out.println( "You have been kicked from the game."  );
         cohortMenu();
     }
 
@@ -399,7 +397,7 @@ class ServerThread implements Runnable {
             cohort.liveDoc = false;
         cohort.numDead++;
         this.out.println(" ");
-        this.out.println(ANSI_BLUE+"You died! Wait for next round!"+ANSI_RESET);
+        this.out.println( "You died! Wait for next round!"  );
     }
 
     public synchronized void save(String toSave)
@@ -413,7 +411,7 @@ class ServerThread implements Runnable {
                 {
                     t.saved = true;
                     cohort.pSaved = t;
-                    this.out.println(ANSI_BLUE+"You have saved someone! You'll find out if he/she was endangered in the morning!"+ANSI_BLUE);
+                    this.out.println( "You have saved someone! You'll find out if he/she was endangered in the morning!");
                     this.out.println(" ");
                     for(ServerThread cl: cohort.teamMates)
                     {
@@ -446,7 +444,7 @@ class ServerThread implements Runnable {
                 {
                     t.scrambled = true;
                     cohort.someScram = true;
-                    this.out.println(ANSI_BLUE+"You have scrambled! See you in the morning!"+ANSI_RESET);
+                    this.out.println( "You have scrambled! See you in the morning!"  );
                     this.out.println(" ");
                     for(ServerThread cl: cohort.teamMates)
                     {
@@ -501,7 +499,7 @@ class ServerThread implements Runnable {
     public void makeDetective()
     {
         detective=true; 
-        this.out.println(ANSI_BLUE+"You're the detective.Investigate somebody by typing 'investigate player_name'"+ANSI_RESET);
+        this.out.println( "You're the detective.Investigate somebody by typing 'investigate player_name'"  );
         this.out.println(" ");
 
     }
@@ -522,7 +520,7 @@ class ServerThread implements Runnable {
     public void polterate()
     {
         polt = true;
-        this.out.println(ANSI_BLUE+"You're the Poltergeist. Your job is simply to make the villagers' job more difficult every day."+ANSI_RESET);
+        this.out.println( "You're the Poltergeist. Your job is simply to make the villagers' job more difficult every day."  );
         this.out.println("Each night, you can make someone's vote random by typing 'scramble player_name'");
         this.out.println("While you don't actually have anyone to talk to, talking to yourself would complete the illusion of a mad ghost.");
         this.out.println(" ");
@@ -531,7 +529,7 @@ class ServerThread implements Runnable {
     public void makeVillager()
     {
         mafia = false;
-        this.out.println(ANSI_BLUE+"You're a villager"+ANSI_RESET);
+        this.out.println( "You're a villager"  );
         this.out.println(" ");
     }
 }

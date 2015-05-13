@@ -64,6 +64,7 @@ class ServerThread implements Runnable {
 
     public void cohortMenu(){
         try {
+            this.out.println("$night");
             this.out.println(" ");
             this.out.println("Active games:");
             this.out.println(" ");
@@ -228,6 +229,22 @@ class ServerThread implements Runnable {
         /* Some debug */
         this.cohortMenu();
 
+        try {
+            if (cohort==null)
+            {
+                this.in.close();
+                this.out.close();
+                this.socket.close();
+                return;
+            }
+            if(cohort.isNight()){this.out.println("$night");}
+            if(cohort.isNight()){this.out.println("$day");}
+        } catch (IOException e) {
+            /* On exception, stop the thread */
+            System.out.println("IOException: " + e);
+            return;
+        }
+
         while (true) {
             try {
                 /* Get string from client */
@@ -285,6 +302,9 @@ class ServerThread implements Runnable {
                     }
                 }
 
+                if(cohort.isNight()){this.out.println("$night");}
+                if(cohort.isNight()){this.out.println("$day");}
+
                 String[] input = fromClient.split(" ");
 
                 input[0] = input[0].toLowerCase();
@@ -326,10 +346,18 @@ class ServerThread implements Runnable {
                 else if(cohort.isNight())
                 {
                     if (mafia && !dead){
-                        if(cohort!=null){cohort.sayMafia(name + ": " +fromClient, this);}
+
+                        if(input[0].equals("$kill"))
+                        {
+                            boolean a = cohort.votekill(input[1], this);
+                            if(!a){this.out.println("They're already dead. Choose again.");}
+                            else cohort.sayMafia(name+" killed " + input[1], this);
+                        }
+                        else if(cohort!=null){cohort.sayMafia(name + ": " +fromClient, this);}
                     }
-                    if(input[0].equals("investigate")&& detective && !dead)
+                    if(input[0].equals("$investigate")&& detective && !dead)
                     {
+
                         cohort.investigate(input[1], this);
                     }
                     /*
@@ -342,31 +370,28 @@ class ServerThread implements Runnable {
                     if(cohort != null){cohort.sayPolt(name +": " +fromClient, this);}
                     }
                      */
-                    if(input[0].equals("save") && doc && !dead)
+                    if(input[0].equals("$save") && doc && !dead)
                     {
                         save(input[1]);
                     }
-                    if(input[0].equals("scramble") && polt && !dead)
+                    if(input[0].equals("$scramble") && polt && !dead)
                     {
                         scramble(input[1]);
                     }
-                    if(input[0].equals("kill") && mafia && !dead)
-                    {
-                        boolean a = cohort.votekill(input[1], this);
-                        if(!a){this.out.println("They're already dead. Choose again.");}
-                    }
+
                 }
 
                 else if(!cohort.isNight())
                 {
-                    if(input[0].equals("vote") && !dead)
+                    
+                    if(input[0].equals("$vote") && !dead)
                     {
                         boolean a = cohort.vote(input[1], this);
                         if(!a){this.out.println("They're already dead. Choose again.");}
-                        else
+                        else if(!scrambled)
                         {
                             cohort.sayAll(( this.getName() + " voted for " + input[1] + "!"  ), this);
-                            this.out.println( "Thanks for voting for "+ input[1]+"!"  );
+                            this.out.println( this.getName() + " voted for " + input[1] + "!"  );
                             this.out.println(" ");
                         }
                     }

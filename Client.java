@@ -17,7 +17,8 @@ class clientThread implements Runnable {
         /* Assign local variable */
         this.client=client;
         try {
-            socket = new Socket("ec2-52-8-76-50.us-west-1.compute.amazonaws.com", 10101);
+            socket = new Socket(
+            "ec2-52-8-76-50.us-west-1.compute.amazonaws.com", 10101);
             /* Create the I/O variables */
             this.out = new PrintWriter(this.socket.getOutputStream(), true);
             this.in  = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
@@ -57,8 +58,8 @@ public class Client extends JFrame
     private JLabel result;
     private JLabel t;
     private JButton[] cells;
-    private JButton exitButton;
-    private JButton initButton;
+    private JButton[] votes;
+    //private JButton initButton;
     private JLabel title;
     private JTextField chat;
 
@@ -147,6 +148,9 @@ public class Client extends JFrame
     }
 
     public void update(String arg){
+        if(arg.equals("$day")){content.setBackground(Color.blue.brighter().brighter());}
+        else if(arg.equals("$night")){content.setBackground(Color.blue.darker().darker());}
+        else if(arg.indexOf("$votes")>-1){}
         result.setText(result.getText().substring(0,result.getText().length()-7) + "<br>" + arg + "</html>");
     }
 
@@ -162,6 +166,7 @@ public class Client extends JFrame
         public void actionPerformed(ActionEvent e)
         {
             if(chat.getText().length()>0){
+                //Client.this.update(chat.getText());
                 result.setText(result.getText().substring(0,result.getText().length()-7) + "<br>" + chat.getText() + "</html>");
                 
                 Client.this.thread.tellServer(chat.getText());

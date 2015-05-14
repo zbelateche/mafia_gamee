@@ -58,7 +58,7 @@ public class Cohort
         for(ServerThread t : teamMates)
         {
             if(tbk.toLowerCase().equals(t.getName().toLowerCase())){
-                t.say(ANSI_BLUE + "You have been kicked for misbehaving!"+ANSI_RESET);
+                t.say(  "You have been kicked for misbehaving!"  );
                 broadcast(t.getName()+" has been kicked.");
 
                 if(isStarted()&& t.isMafia() )
@@ -68,7 +68,7 @@ public class Cohort
                     remove(t);
                     if (isStarted() && mafia==0)
                     {   
-                        broadcast(ANSI_BLUE+"The last Mafia has left.The villagers win!"+ANSI_RESET);
+                        broadcast(  "The last Mafia has left.The villagers win!"  );
                         tellAdmin("As admin, start the game again with start");
                         stop();
                     } 
@@ -81,7 +81,7 @@ public class Cohort
                     remove(t);
                     if(isStarted() && villager==0)
                     {
-                        broadcast(ANSI_BLUE+ "The last villager has left.The mafia win!"+ANSI_RESET);
+                        broadcast(   "The last villager has left.The mafia win!"  );
                         tellAdmin("As admin, start the game again with start");
                         stop();
                     }
@@ -126,7 +126,7 @@ public class Cohort
         {broadcast(t.getName());}
         broadcast("It's the first night.");
         broadcast(" ");
-        broadcast(ANSI_BLUE+ "Go kill, mafia!Go investigate, detective! Go save, doctor! Go scramble, Poltergeist"+ ANSI_RESET);
+        broadcast(   "Go kill, mafia!Go investigate, detective! Go save, doctor! Go scramble, Poltergeist"  );
         broadcast(" ");
         assign();
         listMafia();
@@ -156,7 +156,7 @@ public class Cohort
             else
             {
                 teamMates.get(target).makeMafia();
-                teamMates.get(target).out.println(ANSI_BLUE+"You're a Mafia! You and your allies have to kill all the villagers to win."+ANSI_RESET);
+                teamMates.get(target).out.println(  "You're a Mafia! You and your allies have to kill all the villagers to win."  );
                 mafia++;
             }
         }
@@ -178,7 +178,7 @@ public class Cohort
             target = teamMates.get((int)((Math.random()*teamMates.size())));
         }
         target.makeDoctor();
-        target.out.println(ANSI_BLUE+"You're the Doctor! You get to save whomever you'd like each night."+ANSI_RESET);
+        target.out.println(  "You're the Doctor! You get to save whomever you'd like each night."  );
         target.out.println("To save someone type 'save player_Name'");
         liveDoc=true;
         //assign pol
@@ -337,12 +337,12 @@ public class Cohort
         broadcast(out);
 
         broadcast(" ");
-        broadcast(ANSI_BLUE+ dead + " was killed by the mafia last night."+ANSI_RESET);
+        broadcast(   dead + " was killed by the mafia last night."  );
         if(dead.equals("No one"))
-            broadcast(ANSI_BLUE + "The Doctor managed to prevent the mafia from successfully killing someone!"+ANSI_RESET);
+            broadcast(  "The Doctor managed to prevent the mafia from successfully killing someone!"  );
         if(will != null)
         {
-            broadcast(ANSI_BLUE+ "He/she left a will for you all: " + will + ANSI_RESET);
+            broadcast(   "He/she left a will for you all: " + will   );
         }
         broadcast("Current survivors:");
         for(ServerThread t : teamMates)
@@ -350,13 +350,13 @@ public class Cohort
         broadcast(" ");
         if(villager==0)
         {
-            broadcast(ANSI_BLUE + "All villagers killed. The mafia win!" + ANSI_RESET);
+            broadcast(  "All villagers killed. The mafia win!"   );
             tellAdmin("As admin, start the game again with start");
             stop();
         }
         else if (mafia==0)
         {
-            broadcast(ANSI_BLUE + "All mafia killed. The vilalagers win!"+ ANSI_RESET);
+            broadcast(  "All mafia killed. The vilalagers win!"  );
             tellAdmin("As admin, start the game again with start");
             stop();
         }
@@ -395,7 +395,7 @@ public class Cohort
         
         //broadcast who is dead and their will
         broadcast(" ");
-        broadcast(ANSI_BLUE + dead + " was executed."+ ANSI_RESET);
+        broadcast(  dead + " was executed."  );
         if(will!=null)
         {
             broadcast("He/she left a will for you all: " + will);
@@ -415,13 +415,13 @@ public class Cohort
         //game over stuff
         if(villager==0)
         {
-            broadcast(ANSI_BLUE + "All villagers killed. The mafia win!"+ ANSI_RESET);
+            broadcast(  "All villagers killed. The mafia win!"  );
             tellAdmin("As admin, start the game again with start");
             stop();
         }
         else if (mafia==0)
         {
-            broadcast(ANSI_BLUE + "All mafia killed. The villagers win!" + ANSI_RESET);
+            broadcast(  "All mafia killed. The villagers win!"   );
             tellAdmin("As admin, start the game again with start");
             stop();
         }
@@ -483,7 +483,7 @@ public class Cohort
                 {
                     min = x;
                     tokill = str;//set the person they want to tokill
-                    thread.say(ANSI_BLUE+"You have agreed to kill someone! Find out if that pesky doctor saved him in the morning!"+ ANSI_RESET);
+                    thread.say(  "You have agreed to kill someone! Find out if that pesky doctor saved him in the morning!"  );
                 }
             }
             /**
@@ -574,9 +574,9 @@ public class Cohort
                 //added
 
                 if(t.isMafia())
-                    thread.say(ANSI_BLUE+"You found a mafia! Now convince the other villagers!"+ANSI_RESET);
+                    thread.say(  "You found a mafia! Now convince the other villagers!"  );
                 else
-                    thread.say(ANSI_BLUE+"This person is either not the mafia or dead. See you in the morning!"+ANSI_RESET);
+                    thread.say(  "This person is either not the mafia or dead. See you in the morning!"  );
 
             }
         }
@@ -659,7 +659,7 @@ public class Cohort
             voted = new ArrayList<ServerThread>();
 
             if(!two){night(kill, killWill);}
-            else{night(ANSI_BLUE+ "Vote tied. Nobody" + ANSI_RESET, null);}
+            else{night(   "Vote tied. Nobody"   , null);}
 
             return true;
         }

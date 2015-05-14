@@ -18,7 +18,7 @@ class clientThread implements Runnable {
         this.client=client;
         try {
             socket = new Socket(
-            "ec2-52-8-76-50.us-west-1.compute.amazonaws.com", 10101);
+                "ec2-52-8-76-50.us-west-1.compute.amazonaws.com", 10101);
             /* Create the I/O variables */
             this.out = new PrintWriter(this.socket.getOutputStream(), true);
             this.in  = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
@@ -59,6 +59,7 @@ public class Client extends JFrame
     private JLabel t;
     private JButton[] cells;
     private JButton[] votes;
+    private voteHandler[] voters;
     //private JButton initButton;
     private JLabel title;
     private JTextField chat;
@@ -69,6 +70,7 @@ public class Client extends JFrame
     private InitButtonHandler initHandler;
     private TextHandler textHandler;
 
+    int vilmafdocdetpol;
     private boolean O;
     private boolean gameOver;
     private int font = 20;
@@ -85,7 +87,8 @@ public class Client extends JFrame
         content.setBackground(Color.blue.darker().darker());
 
         //Set layout
-        content.setLayout(new GridLayout(3,3));
+        content.setLayout(new GridLayout(3,4));
+        //content.setLayout(new FlowLayout());
 
         title=new JLabel("Mafia!", SwingConstants.CENTER);
         title.setForeground(Color.white);
@@ -131,6 +134,8 @@ public class Client extends JFrame
         //Initialize
          */
 
+        int vilmafdocdetpol=0;
+        
         new Thread(thread).start();
         init();
     }
@@ -150,7 +155,30 @@ public class Client extends JFrame
     public void update(String arg){
         if(arg.equals("$day")){content.setBackground(Color.blue.brighter().brighter());}
         else if(arg.equals("$night")){content.setBackground(Color.blue.darker().darker());}
-        else if(arg.indexOf("$votes")>-1){}
+        else if(arg.substring(0,1).equals("$")){
+            if(arg.substring(0,2).equals("$v")){
+            vilmafdocdetpol=0;}
+            if(arg.substring(0,2).equals("$k")){
+            vilmafdocdetpol=1;}
+            if(arg.substring(0,2).equals("$s")){
+            vilmafdocdetpol=2;}
+            if(arg.substring(0,2).equals("$p")){
+            vilmafdocdetpol=3;}
+            if(arg.substring(0,2).equals("$i")){
+            vilmafdocdetpol=4;}
+            JButton[] votes = new JButton[100];
+            voteHandler[] voters = new voteHandler[100];
+            String[] args = arg.split(" ");
+            for(int i=1; i<args.length; i++){
+                votes[i-1] = new JButton(args[i]);
+                voters[i-1]=new voteHandler();
+                votes[i-1].addActionListener(voters[i-1]);
+                content.add(votes[i-1]);
+            }
+            init();
+            //content.update();
+        }
+        
         result.setText(result.getText().substring(0,result.getText().length()-7) + "<br>" + arg + "</html>");
     }
 
@@ -168,7 +196,7 @@ public class Client extends JFrame
             if(chat.getText().length()>0){
                 //Client.this.update(chat.getText());
                 result.setText(result.getText().substring(0,result.getText().length()-7) + "<br>" + chat.getText() + "</html>");
-                
+
                 Client.this.thread.tellServer(chat.getText());
                 chat.setText("");
             }
@@ -188,6 +216,21 @@ public class Client extends JFrame
         public void actionPerformed(ActionEvent e)
         {
             init();
+        }
+    }
+
+    private class voteHandler implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            JButton pressed=(JButton)(e.getSource());
+            String text=pressed.getText();
+            //result.setText(result.getText().substring(0,result.getText().length()-7) + "<br>" + text + "</html>");
+            if(vilmafdocdetpol==0){thread.tellServer("$vote "+ text);}
+            if(vilmafdocdetpol==1){thread.tellServer("$kill "+ text);}
+            if(vilmafdocdetpol==2){thread.tellServer("$save "+ text);}
+            if(vilmafdocdetpol==3){thread.tellServer("$scramble "+ text);}
+            if(vilmafdocdetpol==4){thread.tellServer("$investigate "+ text);}
         }
     }
 }

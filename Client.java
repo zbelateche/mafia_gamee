@@ -58,7 +58,7 @@ public class Client extends JFrame
     private JLabel result;
     private JLabel t;
     private JButton[] cells;
-    private JButton[] votes;
+    private JButton[] votes = new JButton[100];
     private voteHandler[] voters;
     //private JButton initButton;
     private JLabel title;
@@ -135,7 +135,7 @@ public class Client extends JFrame
          */
 
         int vilmafdocdetpol=0;
-        
+
         new Thread(thread).start();
         init();
     }
@@ -157,16 +157,21 @@ public class Client extends JFrame
         else if(arg.equals("$night")){content.setBackground(Color.blue.darker().darker());}
         else if(arg.substring(0,1).equals("$")){
             if(arg.substring(0,2).equals("$v")){
-            vilmafdocdetpol=0;}
+                vilmafdocdetpol=0;}
             if(arg.substring(0,2).equals("$k")){
-            vilmafdocdetpol=1;}
+                vilmafdocdetpol=1;}
             if(arg.substring(0,2).equals("$s")){
-            vilmafdocdetpol=2;}
+                vilmafdocdetpol=2;}
             if(arg.substring(0,2).equals("$p")){
-            vilmafdocdetpol=3;}
+                vilmafdocdetpol=3;}
             if(arg.substring(0,2).equals("$i")){
-            vilmafdocdetpol=4;}
-            JButton[] votes = new JButton[100];
+                vilmafdocdetpol=4;}
+            for(int i=0;i<votes.length;i++){
+                if(votes[i]!=null){
+                    Container parent = votes[i].getParent();
+                    parent.remove(votes[i]);}
+            }
+            //JButton[] votes = new JButton[100];
             voteHandler[] voters = new voteHandler[100];
             String[] args = arg.split(" ");
             for(int i=1; i<args.length; i++){
@@ -175,10 +180,10 @@ public class Client extends JFrame
                 votes[i-1].addActionListener(voters[i-1]);
                 content.add(votes[i-1]);
             }
-            init();
+            //init();
             //content.update();
         }
-        
+
         result.setText(result.getText().substring(0,result.getText().length()-7) + "<br>" + arg + "</html>");
     }
 
@@ -225,7 +230,7 @@ public class Client extends JFrame
         {
             JButton pressed=(JButton)(e.getSource());
             String text=pressed.getText();
-            //result.setText(result.getText().substring(0,result.getText().length()-7) + "<br>" + text + "</html>");
+            //result.setText(result.getText().substring(0,result.getText().length()-7) + "<br>" + vilmafdocdetpol +text + "</html>");
             if(vilmafdocdetpol==0){thread.tellServer("$vote "+ text);}
             if(vilmafdocdetpol==1){thread.tellServer("$kill "+ text);}
             if(vilmafdocdetpol==2){thread.tellServer("$save "+ text);}

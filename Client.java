@@ -1,10 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 
 class clientThread implements Runnable {
     protected Socket         socket;
@@ -69,7 +71,6 @@ public class Client extends JFrame
     private JLabel text;
     private JPanel holder;
     private JLabel story;
-
     public final clientThread thread = new clientThread(this);
 
     private ExitButtonHandler exitHandler;
@@ -101,14 +102,21 @@ public class Client extends JFrame
         //content.setLayout(layout);
         layout.setHgap(20);
         layout.setVgap(20);
-        all.setBorder(BorderFactory.createEmptyBorder(50,30,50,30)); 
+        all.setBorder(BorderFactory.createEmptyBorder(10,30,50,30)); 
         all.setOpaque(false);
         content.add(all);
 
-        title=new JLabel("Mafia!", SwingConstants.CENTER);
-        title.setForeground(Color.white);
-        title.setFont(new Font("Arial",0, 50));
-        all.add(title, BorderLayout.PAGE_START);
+        try{
+            BufferedImage myPicture = ImageIO.read(new File("logo.png"));
+            JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+            //Image img = icon.getImage();
+            all.add(picLabel, BorderLayout.PAGE_START);
+        }catch (IOException e) {
+            title=new JLabel("Mafia!", SwingConstants.CENTER);
+            title.setForeground(Color.white);
+            title.setFont(new Font("Arial",0, 50));
+            all.add(title, BorderLayout.PAGE_START);
+        }
 
         result=new JLabel("<html>__________________________<br>Chat:</html>", SwingConstants.LEFT);
         result.setVerticalAlignment(JLabel.BOTTOM);
@@ -126,13 +134,13 @@ public class Client extends JFrame
         BorderLayout borl = new BorderLayout();
         borl.setVgap(15);
         holder.setLayout(borl);
-        holder.setBackground(Color.blue.darker());
+        holder.setBackground(Color.red.darker().darker());
         text = new JLabel("Vote to Execute:");
         text.setForeground(Color.white);
         text.setFont(new Font("Arial",50, font));
         holder.add(text, BorderLayout.PAGE_START);
         buttonPanel = new JPanel();
-        buttonPanel.setBackground(Color.blue.darker());
+        buttonPanel.setBackground(Color.red.darker().darker());
         //buttonPanel.setOpaque(false);
 
         buttonPanel.setLayout(new BoxLayout(buttonPanel,BoxLayout.Y_AXIS));
@@ -151,7 +159,7 @@ public class Client extends JFrame
         all.add(holder, BorderLayout.LINE_START);
 
         story = new JLabel("<html>__________________________<br>Story:</html>");
-        story.setForeground(Color.white);
+        story.setForeground(Color.red);
         story.setFont(new Font("Arial",50, font));
         story.setVerticalAlignment(JLabel.BOTTOM);
         all.add(story, BorderLayout.LINE_END);
@@ -233,7 +241,12 @@ public class Client extends JFrame
             voteHandler[] voters = new voteHandler[100];
             String[] args = arg.split(" ");
             for(int i=1; i<args.length; i++){
-                votes[i-1] = new JButton(args[i]);
+                votes[i-1] = new JButton(args[i]){
+                    {
+                        setSize(100, 30);
+                        setMaximumSize(getSize());
+                    }
+                };
                 voters[i-1]=new voteHandler();
                 votes[i-1].addActionListener(voters[i-1]);
                 //content.add(votes[i-1], BorderLayout.LINE_START);
@@ -253,7 +266,20 @@ public class Client extends JFrame
 
     public static void main(String[] args)
     {
-
+        try{UIManager.setLookAndFeel(
+                "com.sun.java.swing.plaf.gtk.GTKLookAndFeel");}
+        catch (UnsupportedLookAndFeelException e) {
+            // handle exception
+        }
+        catch (ClassNotFoundException e) {
+            // handle exception
+        }
+        catch (InstantiationException e) {
+            // handle exception
+        }
+        catch (IllegalAccessException e) {
+            // handle exception
+        }
         Client gui=new Client();
 
     }
@@ -278,7 +304,7 @@ public class Client extends JFrame
         {
             if(will.getText().length()>0){
                 //Client.this.update(chat.getText());
-                result.setText(result.getText().substring(0,result.getText().length()-7) + "<br>" + "New will: " + will.getText() + "</html>");
+                story.setText(story.getText().substring(0,story.getText().length()-7) + "<br>" + "New will: " + will.getText() + "</html>");
 
                 Client.this.thread.tellServer("$changewill "+will.getText());
 

@@ -51,8 +51,8 @@ class clientThread implements Runnable {
 public class Client extends JFrame
 {
     private static final String TITLE="Mafia Game";
-    private static final int WIDTH=480;
-    private static final int HEIGHT=600;
+    private static final int WIDTH=1920/2;
+    private static final int HEIGHT=1080;
 
     private Container content;
     private JLabel result;
@@ -60,9 +60,13 @@ public class Client extends JFrame
     private JButton[] cells;
     private JButton[] votes = new JButton[100];
     private voteHandler[] voters;
+    private JPanel buttonPanel;
     //private JButton initButton;
     private JLabel title;
     private JTextField chat;
+    private JPanel all;
+    private JLabel text;
+    private JPanel holder;
 
     public final clientThread thread = new clientThread(this);
 
@@ -87,24 +91,53 @@ public class Client extends JFrame
         content.setBackground(Color.blue.darker().darker());
 
         //Set layout
-        content.setLayout(new GridLayout(3,4));
-        //content.setLayout(new FlowLayout());
+        //content.setLayout(new GridLayout(1,2));
+        BorderLayout layout = new BorderLayout();
+        JPanel all = new JPanel();
+        all.setLayout(layout);
+
+        //content.setLayout(layout);
+        layout.setHgap(20);
+        layout.setVgap(20);
+        all.setBorder(BorderFactory.createEmptyBorder(50,30,50,30)); 
+        all.setOpaque(false);
+        content.add(all);
 
         title=new JLabel("Mafia!", SwingConstants.CENTER);
         title.setForeground(Color.white);
-        title.setFont(new Font("Arial",0, font));
-        content.add(title);
+        title.setFont(new Font("Arial",0, 50));
+        all.add(title, BorderLayout.PAGE_START);
 
         result=new JLabel("<html></html>", SwingConstants.LEFT);
         result.setVerticalAlignment(JLabel.BOTTOM);
         result.setForeground(Color.white);
         result.setFont(new Font("Arial",0, font));
-        content.add(result);
+        all.add(result, BorderLayout.CENTER);
 
-        chat=new JTextField("");
+        chat=new JTextField("", 2);
         textHandler=new TextHandler();
         chat.addActionListener(textHandler);
-        content.add(chat);
+        chat.setFont(new Font("Arial",0, font));
+        all.add(chat, BorderLayout.PAGE_END);
+
+        holder = new JPanel();
+        BorderLayout borl = new BorderLayout();
+        borl.setVgap(15);
+        holder.setLayout(borl);
+        holder.setBackground(Color.blue.darker());
+        text = new JLabel("Vote to Execute:");
+        text.setForeground(Color.white);
+        text.setFont(new Font("Arial",50, font));
+        holder.add(text, BorderLayout.PAGE_START);
+        buttonPanel = new JPanel();
+        buttonPanel.setBackground(Color.blue.darker());
+        //buttonPanel.setOpaque(false);
+
+        buttonPanel.setLayout(new BoxLayout(buttonPanel,BoxLayout.Y_AXIS));
+        buttonPanel.add(Box.createRigidArea(new Dimension(0,5)));
+        holder.add(buttonPanel, BorderLayout.CENTER);
+        holder.setBorder(BorderFactory.createEmptyBorder(20,10,20,10)); 
+        all.add(holder, BorderLayout.LINE_START);
 
         //Create init and exit buttons and handlers
         /**
@@ -157,19 +190,27 @@ public class Client extends JFrame
         else if(arg.equals("$night")){content.setBackground(Color.blue.darker().darker());}
         else if(arg.substring(0,1).equals("$")){
             if(arg.substring(0,2).equals("$v")){
+                text.setText("Vote to execute:");
                 vilmafdocdetpol=0;}
             if(arg.substring(0,2).equals("$k")){
+                text.setText("Choose to kill:");
                 vilmafdocdetpol=1;}
             if(arg.substring(0,2).equals("$s")){
+                text.setText("Choose to save:");
                 vilmafdocdetpol=2;}
             if(arg.substring(0,2).equals("$p")){
+                text.setText("Choose to scramble:");
                 vilmafdocdetpol=3;}
             if(arg.substring(0,2).equals("$i")){
+                text.setText("Choose to investigate:");
                 vilmafdocdetpol=4;}
             for(int i=0;i<votes.length;i++){
                 if(votes[i]!=null){
-                    Container parent = votes[i].getParent();
-                    parent.remove(votes[i]);}
+                    //Container parent = votes[i].getParent();
+                    buttonPanel.remove(votes[i]);
+                    buttonPanel.revalidate();
+                    buttonPanel.repaint();
+                }
             }
             //JButton[] votes = new JButton[100];
             voteHandler[] voters = new voteHandler[100];
@@ -178,8 +219,12 @@ public class Client extends JFrame
                 votes[i-1] = new JButton(args[i]);
                 voters[i-1]=new voteHandler();
                 votes[i-1].addActionListener(voters[i-1]);
-                content.add(votes[i-1]);
+                //content.add(votes[i-1], BorderLayout.LINE_START);
+                votes[i-1].setAlignmentX(Component.CENTER_ALIGNMENT);
+                buttonPanel.add(votes[i-1]);
             }
+            holder.remove(buttonPanel);
+            holder.add(buttonPanel, BorderLayout.CENTER);
             //init();
             //content.update();
         }
@@ -199,7 +244,7 @@ public class Client extends JFrame
         public void actionPerformed(ActionEvent e)
         {
             if(chat.getText().length()>0){
-                //Client.this.update(chat.getText());
+                Client.this.update(chat.getText());
                 result.setText(result.getText().substring(0,result.getText().length()-7) + "<br>" + chat.getText() + "</html>");
 
                 Client.this.thread.tellServer(chat.getText());

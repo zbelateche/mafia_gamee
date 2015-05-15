@@ -64,6 +64,7 @@ public class Client extends JFrame
     //private JButton initButton;
     private JLabel title;
     private JTextField chat;
+    private JTextField will;
     private JPanel all;
     private JLabel text;
     private JPanel holder;
@@ -136,7 +137,16 @@ public class Client extends JFrame
         buttonPanel.setLayout(new BoxLayout(buttonPanel,BoxLayout.Y_AXIS));
         buttonPanel.add(Box.createRigidArea(new Dimension(0,5)));
         holder.add(buttonPanel, BorderLayout.CENTER);
-        holder.setBorder(BorderFactory.createEmptyBorder(20,10,20,10)); 
+        holder.setBorder(BorderFactory.createEmptyBorder(20,10,20,10));
+        
+        //JLabel wt = new JLabel("Your Will:");
+        //wt.setForeground(Color.white);
+        //wt.setFont(new Font("Arial",0, font));
+        will = new JTextField("Enter your will");
+        will.setFont(new Font("Arial",0, font));
+        will.addActionListener(new WillHandler());
+        //holder.add(wt, BorderLayout.PAGE_END);
+        holder.add(will, BorderLayout.PAGE_END);
         all.add(holder, BorderLayout.LINE_START);
 
         //Create init and exit buttons and handlers
@@ -244,11 +254,26 @@ public class Client extends JFrame
         public void actionPerformed(ActionEvent e)
         {
             if(chat.getText().length()>0){
-                Client.this.update(chat.getText());
+                //Client.this.update(chat.getText());
                 result.setText(result.getText().substring(0,result.getText().length()-7) + "<br>" + chat.getText() + "</html>");
 
                 Client.this.thread.tellServer(chat.getText());
                 chat.setText("");
+            }
+        }
+    }
+    
+    private class WillHandler implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            if(will.getText().length()>0){
+                //Client.this.update(chat.getText());
+                result.setText(result.getText().substring(0,result.getText().length()-7) + "<br>" + "New will: " + will.getText() + "</html>");
+
+                Client.this.thread.tellServer("$changewill "+will.getText());
+                
+                will.setText("Enter your will");
             }
         }
     }

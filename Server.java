@@ -163,6 +163,7 @@ class ServerThread implements Runnable {
                 this.out.println("Start the game with 'start'");
                 this.out.println(" ");
             }
+            /**
             this.out.println("Enter a will(this can be changed when the game starts):");
             this.out.println(" ");
             will=this.in.readLine();
@@ -174,12 +175,13 @@ class ServerThread implements Runnable {
                 this.socket.close();
                 return;
             }
+            */
 
             this.out.println("To leave to the main menu, type leave.");
             this.out.println("To exit, type exit.");
-            this.out.println("To change your will, type 'changeWill new_will'");
-            this.out.println("NOTE: Wills cannot be changed after death");
-            this.out.println("To vote to kill a player during the day, type 'vote player_name'");
+            //this.out.println("To change your will, type 'changeWill new_will'");
+            //this.out.println("NOTE: Wills cannot be changed after death");
+           // this.out.println("To vote to kill a player during the day, type 'vote player_name'");
             this.out.println("NOTE: Votes cannot be undone");
             this.out.println(" ");
 
@@ -322,7 +324,7 @@ class ServerThread implements Runnable {
                 {
                     cohort.start();
                 }
-                else if(input[0].equals("changewill"))
+                else if(input[0].equals("$changewill"))
                 {
                     if(!dead)
                     {

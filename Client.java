@@ -68,6 +68,7 @@ public class Client extends JFrame
     private JPanel all;
     private JLabel text;
     private JPanel holder;
+    private JLabel story;
 
     public final clientThread thread = new clientThread(this);
 
@@ -109,7 +110,7 @@ public class Client extends JFrame
         title.setFont(new Font("Arial",0, 50));
         all.add(title, BorderLayout.PAGE_START);
 
-        result=new JLabel("<html></html>", SwingConstants.LEFT);
+        result=new JLabel("<html>__________________________<br>Chat:</html>", SwingConstants.LEFT);
         result.setVerticalAlignment(JLabel.BOTTOM);
         result.setForeground(Color.white);
         result.setFont(new Font("Arial",0, font));
@@ -138,7 +139,7 @@ public class Client extends JFrame
         buttonPanel.add(Box.createRigidArea(new Dimension(0,5)));
         holder.add(buttonPanel, BorderLayout.CENTER);
         holder.setBorder(BorderFactory.createEmptyBorder(20,10,20,10));
-        
+
         //JLabel wt = new JLabel("Your Will:");
         //wt.setForeground(Color.white);
         //wt.setFont(new Font("Arial",0, font));
@@ -148,6 +149,12 @@ public class Client extends JFrame
         //holder.add(wt, BorderLayout.PAGE_END);
         holder.add(will, BorderLayout.PAGE_END);
         all.add(holder, BorderLayout.LINE_START);
+
+        story = new JLabel("<html>__________________________<br>Story:</html>");
+        story.setForeground(Color.white);
+        story.setFont(new Font("Arial",50, font));
+        story.setVerticalAlignment(JLabel.BOTTOM);
+        all.add(story, BorderLayout.LINE_END);
 
         //Create init and exit buttons and handlers
         /**
@@ -238,7 +245,9 @@ public class Client extends JFrame
             //init();
             //content.update();
         }
-
+        else if(arg.substring(0,1).equals("@")){
+            story.setText(story.getText().substring(0,story.getText().length()-7) + "<br>" + arg.substring(1,arg.length()) + "</html>");
+        }
         result.setText(result.getText().substring(0,result.getText().length()-7) + "<br>" + arg + "</html>");
     }
 
@@ -262,7 +271,7 @@ public class Client extends JFrame
             }
         }
     }
-    
+
     private class WillHandler implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
@@ -272,7 +281,7 @@ public class Client extends JFrame
                 result.setText(result.getText().substring(0,result.getText().length()-7) + "<br>" + "New will: " + will.getText() + "</html>");
 
                 Client.this.thread.tellServer("$changewill "+will.getText());
-                
+
                 will.setText("Enter your will");
             }
         }

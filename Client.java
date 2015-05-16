@@ -61,7 +61,7 @@ public class Client extends JFrame
     private static final int HEIGHT=1080;
 
     private Container content;
-    private JLabel result;
+    private JTextArea result;
     private JLabel t;
     private JButton[] cells;
     private JButton[] votes = new JButton[100];
@@ -74,7 +74,9 @@ public class Client extends JFrame
     private JPanel all;
     private JLabel text;
     private JPanel holder;
-    private JLabel story;
+    private JTextArea story;
+    private JPanel panel;
+    private JPanel panel1;
     public final clientThread thread = new clientThread(this);
 
     private ExitButtonHandler exitHandler;
@@ -122,20 +124,46 @@ public class Client extends JFrame
             all.add(title, BorderLayout.PAGE_START);
         }
 
-        result=new JLabel("<html>__________________________<br>Chat:</html>", SwingConstants.LEFT);
-        result.setVerticalAlignment(JLabel.BOTTOM);
+        
+        result=new JTextArea("__________________________\nChat:\n");
+        result.setColumns(30);
+        result.setLineWrap(true);
+        //result.setVerticalAlignment((float)SwingConstants.BOTTOM);
+        result.setAlignmentY(JComponent.BOTTOM_ALIGNMENT);
         result.setForeground(Color.white);
+        result.setBackground(Color.blue.darker().darker());
         result.setFont(new Font("Arial",0, font));
+        result.setEditable(false);
+        //result.setSize(10,10);
+        //result.setMaximumSize(result.getSize());
 
-        story = new JLabel("<html>__________________________<br>Story:</html>");
+        story =new JTextArea("__________________________\nStory:\n");
         story.setForeground(Color.red);
         story.setFont(new Font("Arial",50, font));
-        story.setVerticalAlignment(JLabel.BOTTOM);
+        story.setBackground(Color.blue.darker().darker());
+        story.setColumns(30);
+        story.setLineWrap(true);
+        story.setEditable(false);
+        //story.setVerticalAlignment(JLabel.BOTTOM);
+        
+        panel = new JPanel( new BorderLayout() );
+        panel.setBackground( result.getBackground() );
+        panel.setBorder( result.getBorder() );
+        result.setBorder( null );
+        panel.add(result, BorderLayout.SOUTH);
+        //add(new JScrollPane(panel));
+        
+        panel1 = new JPanel( new BorderLayout() );
+        panel1.setBackground( story.getBackground() );
+        panel1.setBorder( story.getBorder() );
+        story.setBorder( null );
+        panel1.add(story, BorderLayout.SOUTH);
+        
 
         JPanel sidebyside = new JPanel();
         sidebyside.setLayout(new GridLayout(1,2));
-        sidebyside.add(result);
-        sidebyside.add(story);
+        sidebyside.add(panel);
+        sidebyside.add(panel1);
         sidebyside.setOpaque(false);
         all.add(sidebyside, BorderLayout.CENTER);
         //all.add(story, BorderLayout.LINE_END);
@@ -154,7 +182,7 @@ public class Client extends JFrame
         holder.setBackground(Color.red.darker().darker());
         Border loweredetched = BorderFactory.createRaisedBevelBorder();
         holder.setBorder(BorderFactory.createCompoundBorder(loweredetched,BorderFactory.createEmptyBorder(20,10,20,10)));
-        
+
         text = new JLabel("Vote to Execute:");
         text.setForeground(Color.white);
         text.setFont(new Font("Arial",50, font));
@@ -229,12 +257,47 @@ public class Client extends JFrame
             result.setForeground(Color.black);
             story.setForeground(Color.red.darker());
             holder.setBackground(new Color(190,0,0));
-            text.setForeground(Color.black);}
+            text.setForeground(Color.black);
+            story.setBackground(new Color(135,206,250));
+            result.setBackground(new Color(135,206,250));
+            panel.setBackground( result.getBackground() );
+            panel1.setBackground( result.getBackground() );
+        }
         else if(arg.equals("$night")){content.setBackground(Color.blue.darker().darker());
             result.setForeground(Color.white);
             story.setForeground(Color.red);
             holder.setBackground(Color.red.darker().darker());
-            text.setForeground(Color.white);}
+            text.setForeground(Color.white);
+            result.setBackground(Color.blue.darker().darker());
+            story.setBackground(Color.blue.darker().darker());
+            panel.setBackground( result.getBackground() );
+            panel1.setBackground( result.getBackground() );
+        }
+        else if(arg.substring(0,2).equals("$a")){
+            text.setText("<html>The Mafia have<br>recruited you.</html>");
+            vilmafdocdetpol=6;
+            for(int i=0;i<votes.length;i++){
+                if(votes[i]!=null){
+                    //Container parent = votes[i].getParent();
+                    buttonPanel.remove(votes[i]);
+                    buttonPanel.revalidate();
+                    buttonPanel.repaint();
+                }
+            }
+            voteHandler[] voters = new voteHandler[100];
+            votes[0] = new JButton("Accept");
+            votes[1] = new JButton("Deny");
+            voters[0]=new voteHandler();
+            votes[0].addActionListener(voters[0]);
+            //content.add(votes[i-1], BorderLayout.LINE_START);
+            votes[0].setAlignmentX(Component.CENTER_ALIGNMENT);
+            buttonPanel.add(votes[0]);
+            voters[1]=new voteHandler();
+            votes[1].addActionListener(voters[1]);
+            //content.add(votes[i-1], BorderLayout.LINE_START);
+            votes[1].setAlignmentX(Component.CENTER_ALIGNMENT);
+            buttonPanel.add(votes[1]);
+        }
         else if(arg.substring(0,1).equals("$")){
             if(arg.substring(0,2).equals("$v")){
                 text.setText("Vote to execute:");
@@ -251,6 +314,9 @@ public class Client extends JFrame
             if(arg.substring(0,2).equals("$i")){
                 text.setText("Choose to investigate:");
                 vilmafdocdetpol=4;}
+            if(arg.substring(0,2).equals("$r")){
+                text.setText("Choose to recruit:");
+                vilmafdocdetpol=5;}
             for(int i=0;i<votes.length;i++){
                 if(votes[i]!=null){
                     //Container parent = votes[i].getParent();
@@ -281,9 +347,9 @@ public class Client extends JFrame
             //content.update();
         }
         else if(arg.substring(0,1).equals("@")){
-            story.setText(story.getText().substring(0,story.getText().length()-7) + "<br>" + arg.substring(1,arg.length()) + "</html>");
+            story.append(arg.substring(1,arg.length())+"\n");
         }
-        result.setText(result.getText().substring(0,result.getText().length()-7) + "<br>" + arg + "</html>");
+        result.append(arg+"\n");
     }
 
     public static void main(String[] args)
@@ -312,7 +378,7 @@ public class Client extends JFrame
         {
             if(chat.getText().length()>0){
                 //Client.this.update(chat.getText());
-                result.setText(result.getText().substring(0,result.getText().length()-7) + "<br>" + chat.getText() + "</html>");
+                result.append(chat.getText()+"\n");
 
                 Client.this.thread.tellServer(chat.getText());
                 chat.setText("");
@@ -326,7 +392,7 @@ public class Client extends JFrame
         {
             if(will.getText().length()>0){
                 //Client.this.update(chat.getText());
-                story.setText(story.getText().substring(0,story.getText().length()-7) + "<br>" + "New will: " + will.getText() + "</html>");
+                story.append("New Will: "+will.getText()+"\n");
 
                 Client.this.thread.tellServer("$changewill "+will.getText());
 
@@ -363,6 +429,8 @@ public class Client extends JFrame
             if(vilmafdocdetpol==2){thread.tellServer("$save "+ text);}
             if(vilmafdocdetpol==3){thread.tellServer("$scramble "+ text);}
             if(vilmafdocdetpol==4){thread.tellServer("$investigate "+ text);}
+            if(vilmafdocdetpol==5){thread.tellServer("$recruit "+ text);}
+            if(vilmafdocdetpol==6){thread.tellServer("$aord "+ text);}
         }
     }
 }

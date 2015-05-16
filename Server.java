@@ -170,18 +170,18 @@ class ServerThread implements Runnable {
             this.out.println("This will be revealed to everyone, once you have died!");
             this.out.println(" ");
             if (will == null) {
-                this.in.close();
-                this.out.close();
-                this.socket.close();
-                return;
+            this.in.close();
+            this.out.close();
+            this.socket.close();
+            return;
             }
-            */
+             */
 
             this.out.println("To leave to the main menu, type leave.");
             this.out.println("To exit, type exit.");
             //this.out.println("To change your will, type 'changeWill new_will'");
             //this.out.println("NOTE: Wills cannot be changed after death");
-           // this.out.println("To vote to kill a player during the day, type 'vote player_name'");
+            // this.out.println("To vote to kill a player during the day, type 'vote player_name'");
             this.out.println("NOTE: Votes cannot be undone");
             this.out.println(" ");
 
@@ -385,7 +385,7 @@ class ServerThread implements Runnable {
 
                 else if(!cohort.isNight())
                 {
-                    
+
                     if(input[0].equals("$vote") && !dead)
                     {
                         boolean a = cohort.vote(input[1], this);
@@ -528,7 +528,7 @@ class ServerThread implements Runnable {
     public void makeDetective()
     {
         detective=true; 
-        this.out.println( "You're the detective.Investigate somebody by typing 'investigate player_name'"  );
+        this.out.println( "You're the detective. You can investigate whether other players are mafia or not!"  );
         this.out.println(" ");
 
     }
@@ -541,7 +541,7 @@ class ServerThread implements Runnable {
     public void makeMafia()
     {
         mafia = true;
-        this.out.println("You're the mafia. Kill somebody by typing 'kill player_name'");
+        this.out.println("You're the mafia. Kill others during the night!");
         this.out.println("You can also talk to the other mafia now!");
         this.out.println(" ");
     }
@@ -550,8 +550,8 @@ class ServerThread implements Runnable {
     {
         polt = true;
         this.out.println( "You're the Poltergeist. Your job is simply to make the villagers' job more difficult every day."  );
-        this.out.println("Each night, you can make someone's vote random by typing 'scramble player_name'");
-        this.out.println("While you don't actually have anyone to talk to, talking to yourself would complete the illusion of a mad ghost.");
+        this.out.println("Each night, you can make someone's vote random.");
+        //this.out.println("While you don't actually have anyone to talk to, talking to yourself would complete the illusion of a mad ghost.");
         this.out.println(" ");
     }
 

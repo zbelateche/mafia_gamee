@@ -169,7 +169,7 @@ public class Client extends JFrame
         //all.add(story, BorderLayout.LINE_END);
         //all.add(result, BorderLayout.CENTER);
 
-        chat=new JTextField("", 2);
+        chat=new JTextField("Type to chat", 2);
         textHandler=new TextHandler();
         chat.addActionListener(textHandler);
         chat.setFont(new Font("Arial",0, font));

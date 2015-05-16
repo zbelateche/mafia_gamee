@@ -7,6 +7,10 @@ import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory; 
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
+import javax.swing.border.EtchedBorder;
 
 class clientThread implements Runnable {
     protected Socket         socket;
@@ -122,7 +126,20 @@ public class Client extends JFrame
         result.setVerticalAlignment(JLabel.BOTTOM);
         result.setForeground(Color.white);
         result.setFont(new Font("Arial",0, font));
-        all.add(result, BorderLayout.CENTER);
+
+        story = new JLabel("<html>__________________________<br>Story:</html>");
+        story.setForeground(Color.red);
+        story.setFont(new Font("Arial",50, font));
+        story.setVerticalAlignment(JLabel.BOTTOM);
+
+        JPanel sidebyside = new JPanel();
+        sidebyside.setLayout(new GridLayout(1,2));
+        sidebyside.add(result);
+        sidebyside.add(story);
+        sidebyside.setOpaque(false);
+        all.add(sidebyside, BorderLayout.CENTER);
+        //all.add(story, BorderLayout.LINE_END);
+        //all.add(result, BorderLayout.CENTER);
 
         chat=new JTextField("", 2);
         textHandler=new TextHandler();
@@ -135,18 +152,21 @@ public class Client extends JFrame
         borl.setVgap(15);
         holder.setLayout(borl);
         holder.setBackground(Color.red.darker().darker());
+        Border loweredetched = BorderFactory.createRaisedBevelBorder();
+        holder.setBorder(BorderFactory.createCompoundBorder(loweredetched,BorderFactory.createEmptyBorder(20,10,20,10)));
+        
         text = new JLabel("Vote to Execute:");
         text.setForeground(Color.white);
         text.setFont(new Font("Arial",50, font));
         holder.add(text, BorderLayout.PAGE_START);
         buttonPanel = new JPanel();
-        buttonPanel.setBackground(Color.red.darker().darker());
-        //buttonPanel.setOpaque(false);
+        //buttonPanel.setBackground(Color.red.darker().darker());
+        buttonPanel.setOpaque(false);
 
         buttonPanel.setLayout(new BoxLayout(buttonPanel,BoxLayout.Y_AXIS));
         buttonPanel.add(Box.createRigidArea(new Dimension(0,5)));
         holder.add(buttonPanel, BorderLayout.CENTER);
-        holder.setBorder(BorderFactory.createEmptyBorder(20,10,20,10));
+        //holder.setBorder(BorderFactory.createEmptyBorder(20,10,20,10));
 
         //JLabel wt = new JLabel("Your Will:");
         //wt.setForeground(Color.white);
@@ -157,12 +177,6 @@ public class Client extends JFrame
         //holder.add(wt, BorderLayout.PAGE_END);
         holder.add(will, BorderLayout.PAGE_END);
         all.add(holder, BorderLayout.LINE_START);
-
-        story = new JLabel("<html>__________________________<br>Story:</html>");
-        story.setForeground(Color.red);
-        story.setFont(new Font("Arial",50, font));
-        story.setVerticalAlignment(JLabel.BOTTOM);
-        all.add(story, BorderLayout.LINE_END);
 
         //Create init and exit buttons and handlers
         /**
@@ -211,8 +225,16 @@ public class Client extends JFrame
     }
 
     public void update(String arg){
-        if(arg.equals("$day")){content.setBackground(Color.blue.brighter().brighter());}
-        else if(arg.equals("$night")){content.setBackground(Color.blue.darker().darker());}
+        if(arg.equals("$day")){content.setBackground(new Color(135,206,250));
+            result.setForeground(Color.black);
+            story.setForeground(Color.red.darker());
+            holder.setBackground(new Color(190,0,0));
+            text.setForeground(Color.black);}
+        else if(arg.equals("$night")){content.setBackground(Color.blue.darker().darker());
+            result.setForeground(Color.white);
+            story.setForeground(Color.red);
+            holder.setBackground(Color.red.darker().darker());
+            text.setForeground(Color.white);}
         else if(arg.substring(0,1).equals("$")){
             if(arg.substring(0,2).equals("$v")){
                 text.setText("Vote to execute:");

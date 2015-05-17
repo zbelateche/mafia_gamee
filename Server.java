@@ -16,15 +16,15 @@ class ServerThread implements Runnable {
     public String name;
     public boolean admin = false;
     public boolean mafia = false;
+
     public boolean dead = false;
     public boolean doc = false;
     public boolean saved = false;
     public boolean polt = false;
     public boolean scrambled = false;
-    //added 
+
     public String will;
 
-    //added
     public boolean investigated=false;
     public boolean detective=false;
 
@@ -149,6 +149,12 @@ class ServerThread implements Runnable {
                         horted = true;
                         dead = false;
                         admin = true;
+                        //added
+                        this.out.println("Choose to allow the computer to randomly select all mafia or allow the first mafia to recruit the rest: 'random' or 'recruit'");
+                        String selection= this.in.readLine();
+                        if(selection.toLowerCase().equals("random"))                     
+                        {cohort.recruit=false;}
+                        //done
                     }
                 }
                 else{this.out.println("Command not understood");
@@ -304,8 +310,8 @@ class ServerThread implements Runnable {
                     }
                 }
 
-                if(cohort.isNight()){this.out.println("$night");}
-                if(cohort.isNight()){this.out.println("$day");}
+                //if(cohort.isNight()){this.out.println("$night");}
+                //if(!cohort.isNight()){this.out.println("$day");}
 
                 String[] input = fromClient.split(" ");
 
@@ -348,15 +354,24 @@ class ServerThread implements Runnable {
                 else if(cohort.isNight())
                 {
                     if (mafia && !dead){
-
+                        //added
                         if(input[0].equals("$kill"))
                         {
                             boolean a = cohort.votekill(input[1], this);
                             if(!a){this.out.println("They're already dead. Choose again.");}
-                            else cohort.sayMafia(name+" killed " + input[1], this);
+                            else cohort.sayMafia(name+" voted to kill " + input[1], this);
+                        }
+                        else if(cohort.recruit==true && input[0].equals("$recruit"))
+                        {
+                            boolean a=cohort.voteRecruit(input[1],this);
+                            if(!a){this.out.println("Something went wrong. Please choose again. ");}
+                            else cohort.sayMafia(name+" voted to recruit "+ input[1],this);
+
                         }
                         else if(cohort!=null){cohort.sayMafia(name + ": " +fromClient, this);}
+                        //done
                     }
+
                     if(input[0].equals("$investigate")&& detective && !dead)
                     {
 
@@ -382,8 +397,17 @@ class ServerThread implements Runnable {
                     }
 
                 }
+                else if(cohort.isDawn==true)
+                {
+                    if(input[0].equals("$aord"))
+                    {
+                        cohort.recruit(input[1]);
+                    }
+                      
+                }
 
-                else if(!cohort.isNight())
+                
+                else if(!cohort.isNight()&& cohort.isDawn==false)
                 {
 
                     if(input[0].equals("$vote") && !dead)
@@ -451,7 +475,11 @@ class ServerThread implements Runnable {
                             }catch(Exception e){}
                         }
                     }
-                    if((cohort.investigated||cohort.detective==0) && (cohort.tokill!=null) && (cohort.someScram==true || cohort.livePolt==false))
+                    if((cohort.torecruit!=null)&&(cohort.investigated||cohort.detective==0) && (cohort.tokill!=null) && (cohort.someScram==true || cohort.livePolt==false))
+                    {
+                        cohort.dawn(cohort.torecruit);
+                    }
+                    else if((cohort.investigated||cohort.detective==0) && (cohort.tokill!=null) && (cohort.someScram==true || cohort.livePolt==false))
                     {
                         cohort.killPerson(cohort.tokill);
                     }
@@ -484,9 +512,13 @@ class ServerThread implements Runnable {
                             }catch(Exception e){}
                         }
                     }
-                    if((cohort.investigated||cohort.detective==0) && (cohort.tokill!=null) && (cohort.pSaved!=null || cohort.liveDoc==false))
+                    if((cohort.torecruit!=null)&&(cohort.investigated||cohort.detective==0) && (cohort.tokill!=null) && (cohort.pSaved!=null || cohort.liveDoc==false))
                     {
-                        cohort.killPerson(cohort.tokill);
+                        cohort.dawn(cohort.torecruit);
+                    }
+                    else if ((cohort.investigated||cohort.detective==0) && (cohort.tokill!=null) && (cohort.pSaved!=null || cohort.liveDoc==false))
+                    {
+                        cohort.killPerson(cohort.tokill); 
                     }
                     return;
                 }
@@ -516,7 +548,7 @@ class ServerThread implements Runnable {
 
     public boolean isPolt(){return polt;}
 
-    public boolean isScrambled(){return scrambled;}
+    public boolean isScrambled(){return scrambled;} 
 
     public void oppoSave()
     {
@@ -528,7 +560,7 @@ class ServerThread implements Runnable {
     public void makeDetective()
     {
         detective=true; 
-        this.out.println( "You're the detective. You can investigate whether other players are mafia or not!"  );
+        this.out.println( "You're the detective.Investigate somebody by typing 'investigate player_name'"  );
         this.out.println(" ");
 
     }
@@ -541,8 +573,14 @@ class ServerThread implements Runnable {
     public void makeMafia()
     {
         mafia = true;
-        this.out.println("You're the mafia. Kill others during the night!");
-        this.out.println("You can also talk to the other mafia now!");
+        //added
+        this.out.println("You're a mafia. At night, kill somebody by typing 'kill player_name'");
+        if(cohort.recruit==true && (cohort.mafia +cohort.deadMafia)<cohort.maxMafia)
+        {this.out.println("Tongiht, you'll get to recruit a mafia onto your team. They have the opportunity to join or remain their character. Recruit by typing 'recuit player_name'"); 
+        }
+        this.out.println("If there are more than one mafia, at night, you can talk to them!If you can't come to an agreement with the other mafia, the computer will randomly choose who gets killed. ");
+
+        //done
         this.out.println(" ");
     }
 
@@ -550,8 +588,8 @@ class ServerThread implements Runnable {
     {
         polt = true;
         this.out.println( "You're the Poltergeist. Your job is simply to make the villagers' job more difficult every day."  );
-        this.out.println("Each night, you can make someone's vote random.");
-        //this.out.println("While you don't actually have anyone to talk to, talking to yourself would complete the illusion of a mad ghost.");
+        this.out.println("Each night, you can make someone's vote random by typing 'scramble player_name'");
+        this.out.println("While you don't actually have anyone to talk to, talking to yourself would complete the illusion of a mad ghost.");
         this.out.println(" ");
     }
 

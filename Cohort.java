@@ -6,15 +6,19 @@ public class Cohort
     public ArrayList<ServerThread> teamMates;
     public boolean started = false;
     public boolean isNight;
+    public boolean isDawn; 
 
     public int mafia=0;
+    public int deadMafia=0;
+    public int maxMafia=0;
+    public boolean recruit=true; 
+
     public int villager=0;
     public int detective = 0;
     public boolean livePolt = true;
     public boolean liveDoc = true;
 
     public boolean investigated=false;//whether the detective investigated
-    public String tokill=null;//the person the mafia wants to kill
     public ServerThread pSaved = null;//the person the doctor saved
     public boolean someScram = false;//whether the geist has scammed
     public boolean killed=false;//the name of the person the mafia have killed
@@ -23,8 +27,13 @@ public class Cohort
     public String pass;
 
     public int votes=0;
+    public String tokill=null;//the person the mafia wants to kill
     public ArrayList<String> toKill = new ArrayList<String>();
+    public ArrayList<String> toVote = new ArrayList<String>();
     public ArrayList<ServerThread> voted = new ArrayList<ServerThread>();
+    public String torecruit=null;
+    public ArrayList<String> toRecruit = new ArrayList<String>();
+    public ServerThread r;
 
     public Object objDoc, objPol;
     public int numDead = 0;
@@ -64,6 +73,7 @@ public class Cohort
                 if(isStarted()&& t.isMafia() )
                 {
                     mafia--;
+                    deadMafia++; 
                     teamMates.remove(t);
                     remove(t);
                     if (isStarted() && mafia==0)
@@ -130,26 +140,57 @@ public class Cohort
         broadcast(" ");
         assign();
         listMafia();
+        maxMafia=3;
+        //maxMafia = (int)((0.25*teamMates.size())+0.5);
+        
+        String out = "$kill:";
+        for(ServerThread a : getPlayers()){
+            if(!a.isDead() && !a.isMafia()){out+=" "+a.getName();}
+        }
+        broadcastM(out);
+
+        out = "$save:";
+        for(ServerThread a : getPlayers()){
+            if(!a.isDead()){out+=" "+a.getName();}
+        }
+        broadcastDo(out);
+
+        out = "$polt:";
+        for(ServerThread a : getPlayers()){
+            if(!a.isDead()){out+=" "+a.getName();}
+        }
+        broadcastP(out);
+
+        out = "$inv:";
+        for(ServerThread a : getPlayers()){
+            if(!a.isDead()){out+=" "+a.getName();}
+        }
+        broadcastDe(out);
     }
 
-    /*
-    public void unsave()
-    {
-    for(ServerThread cl: teamMates)
-    {
-    if(cl.isSaved())
-    cl.oppoSave();
-    }
-    pSaved = null;
-    }
-     */
     public void assign()
     {
         //assigns the mafia
-        int maxMafia = (int)((0.25*teamMates.size())+0.5);
-        mafia = 0;
-        while(mafia < maxMafia)
+        //added
+        if(recruit==false)
         {
+            mafia = 0;
+            while(mafia < maxMafia)
+            {
+                int target = (int)((Math.random()*teamMates.size()));
+                if(teamMates.get(target).isMafia() || teamMates.get(target).isDead())
+                    target = (int)((Math.random()*teamMates.size()));
+                else
+                {
+                    teamMates.get(target).makeMafia();
+                    teamMates.get(target).out.println(  "You're a Mafia! You and your allies have to kill all the villagers to win."  );
+                    mafia++;
+                }
+            }
+        }
+        else
+        {
+            mafia=0;
             int target = (int)((Math.random()*teamMates.size()));
             if(teamMates.get(target).isMafia() || teamMates.get(target).isDead())
                 target = (int)((Math.random()*teamMates.size()));
@@ -160,7 +201,7 @@ public class Cohort
                 mafia++;
             }
         }
-
+        //done
         //assign everyone else as a mafia
         for(ServerThread t : teamMates)
         {
@@ -252,28 +293,28 @@ public class Cohort
         {   t.say(msg);
         }
     }
-    
+
     public void broadcastM(String msg)
     {
         for(ServerThread t : teamMates)
         {   if(t.isMafia()){t.say(msg);}
         }
     }
-    
+
     public void broadcastDo(String msg)
     {
         for(ServerThread t : teamMates)
         {   if(t.doc){t.say(msg);}
         }
     }
-    
+
     public void broadcastP(String msg)
     {
         for(ServerThread t : teamMates)
         {   if(t.polt){t.say(msg);}
         }
     }
-    
+
     public void broadcastDe(String msg)
     {
         for(ServerThread t : teamMates)
@@ -328,8 +369,8 @@ public class Cohort
 
     public void morning(String dead, String will)
     {
+        isDawn=false; 
         broadcast("$day");
-        
         String out = "$votes:";
         for(ServerThread a : getPlayers()){
             if(!a.isDead()){out+=" "+a.getName();}
@@ -355,6 +396,7 @@ public class Cohort
             stop();
         }
         else if (mafia==0)
+
         {
             broadcast(  "All mafia killed. The vilalagers win!"  );
             tellAdmin("As admin, start the game again with start");
@@ -368,31 +410,31 @@ public class Cohort
     public void night(String dead, String will)
     {
         broadcast("$night");
-        
+
         String out = "$kill:";
         for(ServerThread a : getPlayers()){
             if(!a.isDead() && !a.isMafia()){out+=" "+a.getName();}
         }
         broadcastM(out);
-        
+
         out = "$save:";
         for(ServerThread a : getPlayers()){
             if(!a.isDead()){out+=" "+a.getName();}
         }
         broadcastDo(out);
-        
+
         out = "$polt:";
         for(ServerThread a : getPlayers()){
             if(!a.isDead()){out+=" "+a.getName();}
         }
         broadcastP(out);
-        
+
         out = "$inv:";
         for(ServerThread a : getPlayers()){
             if(!a.isDead()){out+=" "+a.getName();}
         }
         broadcastDe(out);
-        
+
         //broadcast who is dead and their will
         broadcast(" ");
         broadcast(  dead + " was executed."  );
@@ -444,6 +486,63 @@ public class Cohort
         isNight = true;
     }
 
+    public void dawn (String recruit)
+    {
+        broadcast("entered dawn");
+        isNight=false; 
+        isDawn=true; 
+        for(ServerThread t : teamMates)
+        {
+            if(recruit.toLowerCase().equals(t.getName().toLowerCase())){r=t;}
+        }
+        r.out.println("The mafia would like to recruit you. Would you like to accept or deny? Note if play a special role, you'll have to abandon your position in order to join the mafia");
+        r.out.println("$aord: ");
+    }
+
+    public void recruit(String answer)
+    {
+        broadcast("entered recruit");
+        if(answer.toLowerCase().equals("$aord accept"))
+        {
+            r.makeMafia(); 
+            mafia++;
+            if(r.isDetective())
+            {   
+                detective--;
+                villager--;
+            }
+            else if(r.isDoc())
+            {
+                liveDoc=false; 
+                villager--;
+            }
+            else if(r.isPolt())
+            {
+                livePolt=false;
+                villager--;
+            }
+            else
+                villager--;
+
+            broadcastM(torecruit+" is now a mafia!");
+            listMafia(); 
+            
+        }
+        else 
+        {
+            r.out.println("You have chosen to remain your original character.");
+            broadcastM(torecruit+" does not want to join your mafia team.");
+
+            votes=0; 
+            voted = new ArrayList<ServerThread>();
+            torecruit=null;
+            toRecruit = new ArrayList<String>(); 
+            r=null; 
+            
+        }
+        killPerson(tokill);
+    }
+
     public synchronized boolean votekill(String tbk, ServerThread thread){
         //if someone doesn't exist...
         boolean exists = false;
@@ -458,7 +557,7 @@ public class Cohort
             broadcast("Hurry up and investigate, detective!");
         }
 
-        //have the mafia agree on someone to kill
+        //have the mafia vote to recruit
         if(votes<mafia && voted.indexOf(thread)==-1)
         {
             for(ServerThread t : teamMates)
@@ -483,37 +582,86 @@ public class Cohort
                 {
                     min = x;
                     tokill = str;//set the person they want to tokill
-                    thread.say(  "You have agreed to kill someone! Find out if that pesky doctor saved him in the morning!"  );
                 }
             }
-            /**
-            if(liveDoc)
-            while(pSaved == null)
-            {
-            try{
-            objDoc.wait();
-            }
-            catch(Exception e){}
-            }
-            if(livePolt){
-            while(!someScram)
-            {
-            try{
-            objPol.wait();
-            }
-            catch(Exception e){}
-            }
-            someScram = false;
-            }
-             **/
-            return true;
+            thread.say( "You have agreed to kill "+ tokill+"! Find out if that pesky doctor saved him in the morning!"  );
+
         }
+
+        //added
+        votes=0;
+        voted = new ArrayList<ServerThread>();
+        if(recruit==true && (mafia+deadMafia)<maxMafia)
+        {
+            thread.say("Now choose someone to recruit someone to your mafia team!");
+            String out="$recruit:";
+            for(ServerThread a : getPlayers()){
+                if(!a.isDead() && !a.isMafia()){out+=" "+a.getName();}
+            }
+            broadcastM(out);
+            return true; 
+        }
+
         if((investigated||detective==0) && (pSaved!=null|| liveDoc==false) && (someScram==true || livePolt==false))
         {
             killPerson(tokill);
         }
+
         return true;
     }
+
+    public synchronized boolean voteRecruit(String tbr, ServerThread thread){
+        //if someone doesn't exist...
+        broadcast("entered voteRecruit");
+        boolean exists = false;
+        for(ServerThread t : teamMates)
+        {
+            if(tbr.toLowerCase().equals(t.getName().toLowerCase())){exists = true;}
+        }
+        if(!exists){return false;}
+
+        //prompts the detective to do his thing
+        if(!investigated && detective==1){
+            broadcast("Hurry up and investigate, detective!");
+        }
+
+        //have the mafia agree on someone to kill
+        if(votes<mafia && voted.indexOf(thread)==-1)
+        {
+            for(ServerThread t : teamMates)
+            {
+                if(tbr.toLowerCase().equals(t.getName().toLowerCase()) && t.isDead()){
+                    return false;}
+            }
+            toRecruit.add(tbr);
+            votes++;
+            voted.add(thread);
+        }
+
+        //once they agree
+        if(votes == mafia)
+        {
+            int min = 0;
+
+            for(String str : toRecruit)
+            {
+                int x = Collections.frequency(toRecruit, str);
+                if(x>min)
+                {
+                    min = x;
+                    torecruit = str;//set the person they want to tokill
+                    thread.say( "You have agreed to recruit someone! Find out if they agree to join the mafia at dawn!"  );
+                }
+            }
+
+            return true;
+        }
+        if((torecruit!=null)&&(investigated||detective==0) && (pSaved!=null|| liveDoc==false) && (someScram==true || livePolt==false))
+        {            
+            dawn(torecruit);
+        }
+        return true;
+    } 
 
     public void killPerson(String tbk)
     {
@@ -536,6 +684,16 @@ public class Cohort
                     else if(t.isMafia())
                     {
                         mafia--;
+                    }
+                    else if(t.isDoc())
+                    {
+                        liveDoc=false; 
+                        villager--;
+                    }
+                    else if(t.isPolt())
+                    {
+                        livePolt=false;
+                        villager--;
                     }
                     else
                     {
@@ -565,7 +723,6 @@ public class Cohort
 
     }
 
-    
     public void investigate (String tbi, ServerThread thread){
         for(ServerThread t : teamMates)
         {
@@ -581,9 +738,13 @@ public class Cohort
             }
         }
         investigated=true;
-        if((pSaved!=null||liveDoc==false) && (tokill!=null) && (someScram==true || livePolt==false))
+        if((pSaved!=null||liveDoc==false) && (tokill!=null) && (torecruit!=null) && (someScram==true || livePolt==false))
         {
-            killPerson(tokill);
+            dawn(torecruit);
+        }
+        else if((pSaved!=null||liveDoc==false) && (tokill!=null) && (someScram==true || livePolt==false))
+        {
+            killPerson(tokill); 
         }
         return;
     }

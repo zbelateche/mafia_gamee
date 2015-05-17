@@ -24,7 +24,7 @@ class clientThread implements Runnable {
         this.client=client;
         try {
             socket = new Socket(
-                "ec2-52-8-76-50.us-west-1.compute.amazonaws.com", 10101);
+                "127.0.0.1", 10101);
             /* Create the I/O variables */
             this.out = new PrintWriter(this.socket.getOutputStream(), true);
             this.in  = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
@@ -124,7 +124,6 @@ public class Client extends JFrame
             all.add(title, BorderLayout.PAGE_START);
         }
 
-        
         result=new JTextArea("__________________________\nChat:\n");
         result.setColumns(30);
         result.setLineWrap(true);
@@ -145,20 +144,19 @@ public class Client extends JFrame
         story.setLineWrap(true);
         story.setEditable(false);
         //story.setVerticalAlignment(JLabel.BOTTOM);
-        
+
         panel = new JPanel( new BorderLayout() );
         panel.setBackground( result.getBackground() );
         panel.setBorder( result.getBorder() );
         result.setBorder( null );
         panel.add(result, BorderLayout.SOUTH);
         //add(new JScrollPane(panel));
-        
+
         panel1 = new JPanel( new BorderLayout() );
         panel1.setBackground( story.getBackground() );
         panel1.setBorder( story.getBorder() );
         story.setBorder( null );
         panel1.add(story, BorderLayout.SOUTH);
-        
 
         JPanel sidebyside = new JPanel();
         sidebyside.setLayout(new GridLayout(1,2));
@@ -273,83 +271,85 @@ public class Client extends JFrame
             panel.setBackground( result.getBackground() );
             panel1.setBackground( result.getBackground() );
         }
-        else if(arg.substring(0,2).equals("$a")){
-            text.setText("<html>The Mafia have<br>recruited you.</html>");
-            vilmafdocdetpol=6;
-            for(int i=0;i<votes.length;i++){
-                if(votes[i]!=null){
-                    //Container parent = votes[i].getParent();
-                    buttonPanel.remove(votes[i]);
-                    buttonPanel.revalidate();
-                    buttonPanel.repaint();
-                }
-            }
-            voteHandler[] voters = new voteHandler[100];
-            votes[0] = new JButton("Accept");
-            votes[1] = new JButton("Deny");
-            voters[0]=new voteHandler();
-            votes[0].addActionListener(voters[0]);
-            //content.add(votes[i-1], BorderLayout.LINE_START);
-            votes[0].setAlignmentX(Component.CENTER_ALIGNMENT);
-            buttonPanel.add(votes[0]);
-            voters[1]=new voteHandler();
-            votes[1].addActionListener(voters[1]);
-            //content.add(votes[i-1], BorderLayout.LINE_START);
-            votes[1].setAlignmentX(Component.CENTER_ALIGNMENT);
-            buttonPanel.add(votes[1]);
-        }
-        else if(arg.substring(0,1).equals("$")){
-            if(arg.substring(0,2).equals("$v")){
-                text.setText("Vote to execute:");
-                vilmafdocdetpol=0;}
-            if(arg.substring(0,2).equals("$k")){
-                text.setText("Choose to kill:");
-                vilmafdocdetpol=1;}
-            if(arg.substring(0,2).equals("$s")){
-                text.setText("Choose to save:");
-                vilmafdocdetpol=2;}
-            if(arg.substring(0,2).equals("$p")){
-                text.setText("Choose to scramble:");
-                vilmafdocdetpol=3;}
-            if(arg.substring(0,2).equals("$i")){
-                text.setText("Choose to investigate:");
-                vilmafdocdetpol=4;}
-            if(arg.substring(0,2).equals("$r")){
-                text.setText("Choose to recruit:");
-                vilmafdocdetpol=5;}
-            for(int i=0;i<votes.length;i++){
-                if(votes[i]!=null){
-                    //Container parent = votes[i].getParent();
-                    buttonPanel.remove(votes[i]);
-                    buttonPanel.revalidate();
-                    buttonPanel.repaint();
-                }
-            }
-            //JButton[] votes = new JButton[100];
-            voteHandler[] voters = new voteHandler[100];
-            String[] args = arg.split(" ");
-            for(int i=1; i<args.length; i++){
-                votes[i-1] = new JButton(args[i]){
-                    {
-                        setSize(100, 30);
-                        setMaximumSize(getSize());
+        if(arg.length()>=2){
+            if(arg.substring(0,2).equals("$a")){
+                text.setText("<html>The Mafia have<br>recruited you.</html>");
+                vilmafdocdetpol=6;
+                for(int i=0;i<votes.length;i++){
+                    if(votes[i]!=null){
+                        //Container parent = votes[i].getParent();
+                        buttonPanel.remove(votes[i]);
+                        buttonPanel.revalidate();
+                        buttonPanel.repaint();
                     }
-                };
-                voters[i-1]=new voteHandler();
-                votes[i-1].addActionListener(voters[i-1]);
+                }
+                voteHandler[] voters = new voteHandler[100];
+                votes[0] = new JButton("Accept");
+                votes[1] = new JButton("Deny");
+                voters[0]=new voteHandler();
+                votes[0].addActionListener(voters[0]);
                 //content.add(votes[i-1], BorderLayout.LINE_START);
-                votes[i-1].setAlignmentX(Component.CENTER_ALIGNMENT);
-                buttonPanel.add(votes[i-1]);
+                votes[0].setAlignmentX(Component.CENTER_ALIGNMENT);
+                buttonPanel.add(votes[0]);
+                voters[1]=new voteHandler();
+                votes[1].addActionListener(voters[1]);
+                //content.add(votes[i-1], BorderLayout.LINE_START);
+                votes[1].setAlignmentX(Component.CENTER_ALIGNMENT);
+                buttonPanel.add(votes[1]);
             }
-            holder.remove(buttonPanel);
-            holder.add(buttonPanel, BorderLayout.CENTER);
-            //init();
-            //content.update();
+            else if(arg.substring(0,1).equals("$")){
+                if(arg.substring(0,2).equals("$v")){
+                    text.setText("Vote to execute:");
+                    vilmafdocdetpol=0;}
+                if(arg.substring(0,2).equals("$k")){
+                    text.setText("Choose to kill:");
+                    vilmafdocdetpol=1;}
+                if(arg.substring(0,2).equals("$s")){
+                    text.setText("Choose to save:");
+                    vilmafdocdetpol=2;}
+                if(arg.substring(0,2).equals("$p")){
+                    text.setText("Choose to scramble:");
+                    vilmafdocdetpol=3;}
+                if(arg.substring(0,2).equals("$i")){
+                    text.setText("Choose to investigate:");
+                    vilmafdocdetpol=4;}
+                if(arg.substring(0,2).equals("$r")){
+                    text.setText("Choose to recruit:");
+                    vilmafdocdetpol=5;}
+                for(int i=0;i<votes.length;i++){
+                    if(votes[i]!=null){
+                        //Container parent = votes[i].getParent();
+                        buttonPanel.remove(votes[i]);
+                        buttonPanel.revalidate();
+                        buttonPanel.repaint();
+                    }
+                }
+                //JButton[] votes = new JButton[100];
+                voteHandler[] voters = new voteHandler[100];
+                String[] args = arg.split(" ");
+                for(int i=1; i<args.length; i++){
+                    votes[i-1] = new JButton(args[i]){
+                        {
+                            setSize(100, 30);
+                            setMaximumSize(getSize());
+                        }
+                    };
+                    voters[i-1]=new voteHandler();
+                    votes[i-1].addActionListener(voters[i-1]);
+                    //content.add(votes[i-1], BorderLayout.LINE_START);
+                    votes[i-1].setAlignmentX(Component.CENTER_ALIGNMENT);
+                    buttonPanel.add(votes[i-1]);
+                }
+                holder.remove(buttonPanel);
+                holder.add(buttonPanel, BorderLayout.CENTER);
+                //init();
+                //content.update();
+            }
+            else if(arg.substring(0,1).equals("@")){
+                story.append(arg.substring(1,arg.length())+"\n");
+            }
+            else{result.append(arg+"\n");}
         }
-        else if(arg.substring(0,1).equals("@")){
-            story.append(arg.substring(1,arg.length())+"\n");
-        }
-        result.append(arg+"\n");
     }
 
     public static void main(String[] args)
@@ -431,6 +431,14 @@ public class Client extends JFrame
             if(vilmafdocdetpol==4){thread.tellServer("$investigate "+ text);}
             if(vilmafdocdetpol==5){thread.tellServer("$recruit "+ text);}
             if(vilmafdocdetpol==6){thread.tellServer("$aord "+ text);}
+            for(int i=0;i<votes.length;i++){
+                if(votes[i]!=null){
+                    //Container parent = votes[i].getParent();
+                    buttonPanel.remove(votes[i]);
+                    buttonPanel.revalidate();
+                    buttonPanel.repaint();
+                }
+            }
         }
     }
 }

@@ -23,7 +23,7 @@ comment18.params=msg\ thread
 comment18.target=void\ sayMafia(java.lang.String,\ ServerThread)
 comment19.params=msg
 comment19.target=void\ tellAdmin(java.lang.String)
-comment19.text=\ I\ don't\ know\ what\ this\ is\ for?\ There\ is\ only\ one\ doctor\ and\ pol\n\ \ \ \ public\ void\ sayDoc(String\ msg,\ ServerThread\ thread)\n\ \ \ \ {\n\ \ \ \ for(ServerThread\ t\ \:\ teamMates)\n\ \ \ \ {\n\ \ \ \ if(thread.getID()\!\=(t.getID())\ &&\ t.isDoc()\ &&\ \!t.isDead())\n\ \ \ \ {t.say(msg);}\n\ \ \ \ else\ if(t.isDead())\n\ \ \ \ {t.say("*Doctor*\ "+msg);}\n\ \ \ \ }\n\ \ \ \ }\n\n\ \ \ \ public\ void\ sayPolt(String\ msg,\ ServerThread\ thread)\n\ \ \ \ {\n\ \ \ \ for(ServerThread\ t\ \:\ teamMates)\n\ \ \ \ {\n\ \ \ \ if(thread.getID()\!\=(t.getID())\ &&\ t.isPolt()\ &&\ \!t.isDead())\n\ \ \ \ {t.say(msg);}\n\ \ \ \ else\ if(t.isDead())\n\ \ \ \ {t.say("*Poltergeist*\ "+msg);}\n\ \ \ \ }\n\ \ \ \ }\n
+comment19.text=\ I\ don't\ know\ what\ this\ is\ for?\ There\ is\ only\ one\ doctor\ and\ pol\n\ \ \ \ public\ void\ sayDoc(String\ msg,\ ServerThread\ thread)\n\ \ \ \ {\n\ \ \ \ for(ServerThread\ t\ \:\ teamMates)\n\ \ \ \ {\n\ \ \ \ if(thread.getID()\!\=(t.getID())\ &&\ t.isDoc()\ &&\ \!t.isDead())\n\ \ \ \ {t.say(msg);}\n\ \ \ \ else\ if(t.isDead())\n\ \ \ \ {t.say("*Doctor*\ "+msg);}\n\ \ \ \ }\n\ \ \ \ }\n\ \ \ \ public\ void\ sayPolt(String\ msg,\ ServerThread\ thread)\n\ \ \ \ {\n\ \ \ \ for(ServerThread\ t\ \:\ teamMates)\n\ \ \ \ {\n\ \ \ \ if(thread.getID()\!\=(t.getID())\ &&\ t.isPolt()\ &&\ \!t.isDead())\n\ \ \ \ {t.say(msg);}\n\ \ \ \ else\ if(t.isDead())\n\ \ \ \ {t.say("*Poltergeist*\ "+msg);}\n\ \ \ \ }\n\ \ \ \ }\n
 comment2.params=tbk
 comment2.target=void\ kick(java.lang.String)
 comment20.params=dead\ will

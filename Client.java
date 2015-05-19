@@ -77,6 +77,8 @@ public class Client extends JFrame
     private JTextArea story;
     private JPanel panel;
     private JPanel panel1;
+    private JScrollPane pane;
+    private JScrollPane pane1;
     public final clientThread thread = new clientThread(this);
 
     private ExitButtonHandler exitHandler;
@@ -125,7 +127,7 @@ public class Client extends JFrame
         }
 
         result=new JTextArea("__________________________\nChat:\n");
-        result.setColumns(30);
+        //result.setColumns(30);
         result.setLineWrap(true);
         //result.setVerticalAlignment((float)SwingConstants.BOTTOM);
         result.setAlignmentY(JComponent.BOTTOM_ALIGNMENT);
@@ -140,7 +142,7 @@ public class Client extends JFrame
         story.setForeground(Color.red);
         story.setFont(new Font("Arial",50, font));
         story.setBackground(Color.blue.darker().darker());
-        story.setColumns(30);
+        //story.setColumns(30);
         story.setLineWrap(true);
         story.setEditable(false);
         //story.setVerticalAlignment(JLabel.BOTTOM);
@@ -151,6 +153,13 @@ public class Client extends JFrame
         result.setBorder( null );
         panel.add(result, BorderLayout.SOUTH);
         //add(new JScrollPane(panel));
+        pane = new JScrollPane();
+        pane.getViewport().setBackground(result.getBackground());
+        pane.getViewport().add(panel);
+        pane.setBorder(BorderFactory.createEmptyBorder());
+        pane.setViewportBorder(BorderFactory.createEmptyBorder());
+        result.setCaretPosition(result.getDocument().getLength());
+        pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         panel1 = new JPanel( new BorderLayout() );
         panel1.setBackground( story.getBackground() );
@@ -158,12 +167,21 @@ public class Client extends JFrame
         story.setBorder( null );
         panel1.add(story, BorderLayout.SOUTH);
 
+        pane1 = new JScrollPane();
+        pane1.getViewport().setBackground(result.getBackground());
+        pane1.getViewport().add(panel1);
+        story.setCaretPosition(story.getDocument().getLength());
+        pane1.setBorder(BorderFactory.createEmptyBorder());
+        pane1.setViewportBorder(BorderFactory.createEmptyBorder());
+
         JPanel sidebyside = new JPanel();
         sidebyside.setLayout(new GridLayout(1,2));
-        sidebyside.add(panel);
-        sidebyside.add(panel1);
+        sidebyside.add(pane);
+        sidebyside.add(pane1);
         sidebyside.setOpaque(false);
+
         all.add(sidebyside, BorderLayout.CENTER);
+        result.setColumns(pane.getViewport().getSize().width);
         //all.add(story, BorderLayout.LINE_END);
         //all.add(result, BorderLayout.CENTER);
 

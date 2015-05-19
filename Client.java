@@ -24,7 +24,7 @@ class clientThread implements Runnable {
         this.client=client;
         try {
             socket = new Socket(
-                "127.0.0.1", 10101);
+                "ec2-52-8-76-50.us-west-1.compute.amazonaws.com", 10101);
             /* Create the I/O variables */
             this.out = new PrintWriter(this.socket.getOutputStream(), true);
             this.in  = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
@@ -126,7 +126,7 @@ public class Client extends JFrame
             all.add(title, BorderLayout.PAGE_START);
         }
 
-        result=new JTextArea("__________________________\nChat:\n");
+        result=new JTextArea("_____\nChat:\n");
         //result.setColumns(10);
         result.setLineWrap(true);
         //result.setVerticalAlignment((float)SwingConstants.BOTTOM);
@@ -138,7 +138,7 @@ public class Client extends JFrame
         //result.setSize(10,10);
         //result.setMaximumSize(result.getSize());
 
-        story =new JTextArea("__________________________\nStory:\n");
+        story =new JTextArea("______\nStory:\n");
         story.setForeground(Color.red);
         story.setFont(new Font("Arial",50, font));
         story.setBackground(Color.blue.darker().darker());
@@ -184,6 +184,7 @@ public class Client extends JFrame
         sidebyside.add(pane);
         sidebyside.add(pane1);
         sidebyside.setOpaque(false);
+        result.setSize(result.getSize().height,pane.getSize().width);
 
         all.add(sidebyside, BorderLayout.CENTER);
         //result.setColumns(pane.getViewport().getSize().width);
@@ -379,6 +380,8 @@ public class Client extends JFrame
         }
         story.setCaretPosition(story.getDocument().getLength());
         result.setCaretPosition(result.getDocument().getLength());
+        result.setSize(result.getSize().height,pane.getSize().width);
+        story.setSize(story.getSize().height,pane1.getSize().width);
     }
 
     public static void main(String[] args)
@@ -408,6 +411,9 @@ public class Client extends JFrame
             if(chat.getText().length()>0){
                 //Client.this.update(chat.getText());
                 result.append(chat.getText()+"\n");
+
+                result.setSize(result.getSize().height,pane.getSize().width);
+                story.setSize(story.getSize().height,pane1.getSize().width);
 
                 Client.this.thread.tellServer(chat.getText());
                 if(chat.getText().toLowerCase().equals("exit")){System.exit(0);}

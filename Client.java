@@ -127,7 +127,7 @@ public class Client extends JFrame
         }
 
         result=new JTextArea("__________________________\nChat:\n");
-        //result.setColumns(30);
+        //result.setColumns(10);
         result.setLineWrap(true);
         //result.setVerticalAlignment((float)SwingConstants.BOTTOM);
         result.setAlignmentY(JComponent.BOTTOM_ALIGNMENT);
@@ -157,9 +157,12 @@ public class Client extends JFrame
         pane.getViewport().setBackground(result.getBackground());
         pane.getViewport().add(panel);
         pane.setBorder(BorderFactory.createEmptyBorder());
+        //pane.setBackground(Color.red.darker().darker());
         pane.setViewportBorder(BorderFactory.createEmptyBorder());
         result.setCaretPosition(result.getDocument().getLength());
         pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        //pane.getVerticalScrollBar().setBackground(result.getBackground());
 
         panel1 = new JPanel( new BorderLayout() );
         panel1.setBackground( story.getBackground() );
@@ -173,6 +176,8 @@ public class Client extends JFrame
         story.setCaretPosition(story.getDocument().getLength());
         pane1.setBorder(BorderFactory.createEmptyBorder());
         pane1.setViewportBorder(BorderFactory.createEmptyBorder());
+        pane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        pane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         JPanel sidebyside = new JPanel();
         sidebyside.setLayout(new GridLayout(1,2));
@@ -181,7 +186,7 @@ public class Client extends JFrame
         sidebyside.setOpaque(false);
 
         all.add(sidebyside, BorderLayout.CENTER);
-        result.setColumns(pane.getViewport().getSize().width);
+        //result.setColumns(pane.getViewport().getSize().width);
         //all.add(story, BorderLayout.LINE_END);
         //all.add(result, BorderLayout.CENTER);
 
@@ -278,6 +283,8 @@ public class Client extends JFrame
             result.setBackground(new Color(135,206,250));
             panel.setBackground( result.getBackground() );
             panel1.setBackground( result.getBackground() );
+            pane.getViewport().setBackground(result.getBackground());
+            pane1.getViewport().setBackground(result.getBackground());
         }
         else if(arg.equals("$night")){content.setBackground(Color.blue.darker().darker());
             result.setForeground(Color.white);
@@ -288,6 +295,8 @@ public class Client extends JFrame
             story.setBackground(Color.blue.darker().darker());
             panel.setBackground( result.getBackground() );
             panel1.setBackground( result.getBackground() );
+            pane.getViewport().setBackground(result.getBackground());
+            pane1.getViewport().setBackground(result.getBackground());
         }
         if(arg.length()>=2){
             if(arg.substring(0,2).equals("$a")){

@@ -160,7 +160,7 @@ public class Client extends JFrame
         //pane.setBackground(Color.red.darker().darker());
         pane.setViewportBorder(BorderFactory.createEmptyBorder());
         result.setCaretPosition(result.getDocument().getLength());
-        pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        //pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         //pane.getVerticalScrollBar().setBackground(result.getBackground());
 
@@ -176,7 +176,7 @@ public class Client extends JFrame
         story.setCaretPosition(story.getDocument().getLength());
         pane1.setBorder(BorderFactory.createEmptyBorder());
         pane1.setViewportBorder(BorderFactory.createEmptyBorder());
-        pane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        //pane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         pane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         JPanel sidebyside = new JPanel();
@@ -377,6 +377,8 @@ public class Client extends JFrame
             }
             else{result.append(arg+"\n");}
         }
+        story.setCaretPosition(story.getDocument().getLength());
+        result.setCaretPosition(result.getDocument().getLength());
     }
 
     public static void main(String[] args)

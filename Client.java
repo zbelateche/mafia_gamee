@@ -24,7 +24,7 @@ class clientThread implements Runnable {
         this.client=client;
         try {
             socket = new Socket(
-                "ec2-52-8-76-50.us-west-1.compute.amazonaws.com", 10101);
+                "127.0.0.1", 10101);
             /* Create the I/O variables */
             this.out = new PrintWriter(this.socket.getOutputStream(), true);
             this.in  = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
@@ -408,6 +408,7 @@ public class Client extends JFrame
                 result.append(chat.getText()+"\n");
 
                 Client.this.thread.tellServer(chat.getText());
+                if(chat.getText().toLowerCase().equals("exit")){System.exit(0);}
                 chat.setText("");
             }
         }

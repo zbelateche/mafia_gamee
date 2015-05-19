@@ -112,6 +112,13 @@ public class Cohort
     public void remove(ServerThread t)
     {
         teamMates.remove(t);
+        if(teamMates.size()==0){
+            ServerThread.cohorts.remove(this);
+            return;
+        }
+        if(t.isAdmin()){
+            teamMates.get(0).makeAdmin();
+        }
     }
 
     public String getID(){

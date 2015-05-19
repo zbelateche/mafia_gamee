@@ -64,6 +64,7 @@ class ServerThread implements Runnable {
 
     public void cohortMenu(){
         try {
+            admin=false;
             this.out.println("$night");
             this.out.println(" ");
             this.out.println("@Active games:");
@@ -157,6 +158,7 @@ class ServerThread implements Runnable {
                         //added
                         this.out.println("Choose to allow the computer to randomly select all mafia or allow the first mafia to recruit the rest: 'random' or 'recruit'");
                         String selection= this.in.readLine();
+                        this.cohort=cohort;
                         if(selection.toLowerCase().equals("random"))                     
                         {
                             cohort.recruit=false;}
@@ -280,8 +282,7 @@ class ServerThread implements Runnable {
                     if(cohort.isStarted()&& this.isMafia() )
                     {
                         cohort.mafia--;
-                        cohort.teamMates.remove(this);
-                        cohort.remove(this);
+                        //cohort.teamMates.remove(this)
                         if (cohort.isStarted() && cohort.mafia==0)
                         {   
                             cohort.broadcast( "@The last Mafia has left.The villagers win!"  );
@@ -289,13 +290,11 @@ class ServerThread implements Runnable {
                             cohort.broadcast("GAME OVER. Villagers win."); 
                             cohort.stop();
                         } 
-                        this.cohort = null;
                     }
                     else if(cohort.isStarted())
                     {
                         cohort.villager--; 
-                        cohort.teamMates.remove(this);
-                        cohort.remove(this);
+                        //cohort.teamMates.remove(this);
                         if( cohort.isStarted() && cohort.villager==0)
                         {
                             cohort.broadcast(  "@The last villager has left.The mafia win!"  );
@@ -303,12 +302,9 @@ class ServerThread implements Runnable {
                             cohort.broadcast("GAME OVER. Villagers win."); 
                             cohort. stop();
                         }
-
-                        this.cohort = null;
                     }
 
-                    this.cohortMenu();
-                    if(fromClient.toLowerCase().equals("exit")||!cohort.isStarted())
+                    if(fromClient.toLowerCase().equals("exit"))
                     {
                         cohort.broadcast(name+" has exited.");
                         this.out.println("You have exited the game."); 
@@ -317,6 +313,9 @@ class ServerThread implements Runnable {
                         this.socket.close();
                         return;
                     }
+                    cohort.remove(this);
+                    this.cohort=null;
+                    this.cohortMenu();
                 }
 
                 //if(cohort.isNight()){this.out.println("$night");}
@@ -385,7 +384,7 @@ class ServerThread implements Runnable {
                     {
                         cohort.investigate(input[1], this);
                     }
-                    
+
                     /*
                     if (doc && !dead)
                     {
@@ -412,10 +411,9 @@ class ServerThread implements Runnable {
                     {
                         cohort.recruit(input[1]);
                     }
-                      
+
                 }
 
-                
                 else if(!cohort.isNight()&& cohort.isDawn==false)
                 {
 
@@ -458,7 +456,7 @@ class ServerThread implements Runnable {
             cohort.livePolt = false;
         if(isDoc())
             cohort.liveDoc = false;
-        
+
         cohort.numDead++;
         this.out.println(" ");
         this.out.println( "You died! GAME OVER. Wait for next round!"  );
@@ -556,7 +554,7 @@ class ServerThread implements Runnable {
     public boolean isAdmin(){return admin;}
 
     public boolean isDoc(){return doc;}
-    
+
     public void setMafia(){
         doc = false;
         saved = false;
@@ -564,7 +562,7 @@ class ServerThread implements Runnable {
         scrambled = false;
         detective=false;
         cohort.investigated=false;
-        
+
     }
 
     public boolean isSaved(){return saved;}
@@ -625,6 +623,13 @@ class ServerThread implements Runnable {
             this.out.println("@Each morning, you vote for who you think is the mafia!");
             this.out.println(" ");
         }
+    }
+
+    public void makeAdmin(){
+        admin=true;
+        this.out.println("@The admin has left, you are now admin");
+        this.out.println("@As an admin, kick players using the kick command: 'kick player_name'");
+        this.out.println("@Start the game with 'start'");
     }
 }
 

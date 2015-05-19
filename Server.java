@@ -1,3 +1,4 @@
+
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -69,7 +70,7 @@ class ServerThread implements Runnable {
             this.out.println(" ");
             for(Cohort t: ServerThread.cohorts)
             {
-                this.out.println(t.getID());
+                this.out.println("@"+t.getID());
             }
             boolean horted = false;
             if(ServerThread.cohorts.size()>0){this.out.println(" ");}
@@ -157,7 +158,8 @@ class ServerThread implements Runnable {
                         this.out.println("Choose to allow the computer to randomly select all mafia or allow the first mafia to recruit the rest: 'random' or 'recruit'");
                         String selection= this.in.readLine();
                         if(selection.toLowerCase().equals("random"))                     
-                        {cohort.recruit=false;}
+                        {
+                            cohort.recruit=false;}
                         //done
                     }
                 }

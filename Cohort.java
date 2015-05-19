@@ -39,9 +39,6 @@ public class Cohort
 
     public Object objDoc, objPol;
     public int numDead = 0;
-
-    public static final String ANSI_RESET="\u001B[0m";
-    public static final String ANSI_BLUE="\u001B[34m";
     public Cohort(String name, String password)
     {
         teamName=name;
@@ -130,6 +127,8 @@ public class Cohort
             return;
         }
         started = true;
+        maxMafia=2;
+        //maxMafia = (int)((0.25*teamMates.size())+0.5);
         isNight = true;
         broadcast(" ");
         broadcast("The game has begun!");
@@ -142,8 +141,7 @@ public class Cohort
         broadcast(" ");
         assign();
         listMafia();
-        //maxMafia=3;
-        maxMafia = (int)((0.25*teamMates.size())+0.5);
+        
 
         String out = "$kill:";
         for(ServerThread a : getPlayers()){
@@ -176,6 +174,7 @@ public class Cohort
         //added
         if(recruit==false)
         {
+            broadcast("entered assign mafia.");
             mafia = 0;
             while(mafia < maxMafia)
             {
@@ -379,10 +378,38 @@ public class Cohort
         broadcast(out);
 
         broadcast(" ");
-        broadcast( "@"+dead + " was killed by the mafia last night."  );
+        int rand = (int)(Math.random())*3 + 1;
+        if(rand==1)
+        {
+            broadcast("@It was a beautiful fall day. " + dead + "  was finishing up at the grocery store, purchasing ingredients for a pumpkin pie they were planning on making that evening. " + dead + " thanked the cashier and headed out of the store. Strangely, the parking lot was pretty much empty and it seemed like all of the lights were out. Out of nowhere, " + dead + "  saw a bright spark and a heard a deafening sound, emanating from the flash. " + dead + " collapsed, suffering a gunshot through the skull, never to bake another pumpkin pie again. Who is responsible for this violent act?");
+        }
+
+        if(rand==2)
+        {
+            broadcast("@It was a Saturday evening, and " + dead + " was out on a date at the new fancy Italian restaurant in town. Rumor has it: the food is to die for. When the waiter placed her lasagna dish in front of them, they couldn’t resist taking a bite. A second later, they fell over dead. The people around called 911 but it was too late. "+ dead + " was eating by themselves, so who could have done it?");
+        }
+
+        else
+        {
+            broadcast("@" + dead + "was camping with some friends in a cabin in Montana. It was getting pretty chilly, so they decided to make a fire. Realizing there wasn’t enough wood, " + dead + "volunteered to go outside to gather some for the fire. Everyone saw " + dead + " go into the woods, but no one saw them come out. Dun Dunn Dunnn. Who dun it? hehe ;)");
+        }
+
         if(dead.equals("No one"))
         {
-            broadcast( "@ Doctor saved" );}
+            int assign =(int) (Math.random())*3 + 1;
+            if(assign==1)
+            {
+                broadcast("@It was a beautiful day. A citizen of the town was leaving the local grocery store when they were shot in the parking lot. They were losing a lot of blood, fast. The situation was dire, it looked like that poor citizen would die. Luckily, the doctor happened to be exiting the McDonald’s drive-thru in the same shopping center. The doctor saw the citizen lying in the street, and quickly rushed over to them. The doctor was able to stop the bleeding and take the citizen to the nearest hospital, saving their life.");
+            }
+            if(assign==2)
+            {
+                broadcast("@It was a Saturday evening, and a citizen of the town was out on a date at the new, fancy Italian restaurant in town. Of course, the citizen had to impress their date by ordering the best wine on the menu. The doctor was also dining at the same place and had just exited the restroom in the back when they saw one of the waiters produce a small vial filled with green liquid from the pocket in his apron and proceed to pour the contents into a wine glass through the transparent kitchen door. Recognizing this as an attempted poisoning, the doctor burst through the kitchen door and called attention to the situation. The citizen was the intended recipient of the poison, and if not for the heroic doctor, would surely be dead at this point. The mischievous mafia watched through the tinted windows of their black SUV as the police dragged away the paid waiter. Who are the mafia?");
+            }
+            else
+            {
+                broadcast("@A citizen of the town was camping with some friends in a cabin in Montana. It was getting pretty chilly, so they decided to make a fire. Realizing there wasn’t enough wood, the citizen volunteered to go outside to gather some for the fire. Everyone saw the citizen go into the woods, but no one saw them come out. Luckily, the doctor was on their annual hike when they noticed a strange creature in the nearby river. The doctor jumped in and pulled the drowning body onto the river bank. The doctor was able to pump profuse amounts of water from the citizen’s chest, saving their life. How did the citizen end up in the river?");
+            }
+        }
         if(will != null)
         {
             broadcast("@He/she left a will for you all: " + will   );
@@ -490,7 +517,6 @@ public class Cohort
 
     public void dawn (String recruit)
     {
-        broadcast("entered dawn");
         isNight=false; 
         isDawn=true; 
         for(ServerThread t : teamMates)
@@ -526,7 +552,7 @@ public class Cohort
             else
                 villager--;
             r.setMafia(); 
-            broadcastM(torecruit+" is now a mafia! There are now" + mafia +" and the maximum ammount is+"+ maxMafia);
+            broadcastM(torecruit+" is now a mafia! The maximum ammount is "+ maxMafia+" mafia.");
             listMafia(); 
 
         }
@@ -592,7 +618,6 @@ public class Cohort
             broadcastM( "You have agreed to kill "+ tokill+"! Find out if that pesky doctor saved him in the morning!"  );
 
         }
-        broadcastM("VK- # of votes: "+votes+";# of mafia: "+mafia+";# of maxMafia: "+maxMafia);
         //added
         if((votes==mafia) && (recruit==true) && (mafia+deadMafia)<maxMafia)
         {
@@ -616,8 +641,6 @@ public class Cohort
 
     public synchronized boolean voteRecruit(String tbr, ServerThread thread){
         //if someone doesn't exist...
-
-        broadcast("entered voteRecruit");
         boolean exists = false;
         for(ServerThread t : teamMates)
         {
@@ -642,7 +665,6 @@ public class Cohort
             votes++;
             voted.add(thread);
         }
-        broadcastM("VR- # of votes: "+votes+";# of mafia: "+mafia+";# of maxMafia: "+maxMafia);
         //once they agree
         if(votes == mafia)
         {

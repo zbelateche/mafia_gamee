@@ -184,7 +184,7 @@ public class Client extends JFrame
         sidebyside.add(pane);
         sidebyside.add(pane1);
         sidebyside.setOpaque(false);
-        result.setSize(result.getSize().height,pane.getSize().width);
+        //result.setSize(result.getSize().height,pane.getSize().width);
 
         all.add(sidebyside, BorderLayout.CENTER);
         //result.setColumns(pane.getViewport().getSize().width);
@@ -380,8 +380,8 @@ public class Client extends JFrame
         }
         story.setCaretPosition(story.getDocument().getLength());
         result.setCaretPosition(result.getDocument().getLength());
-        result.setSize(result.getSize().height,pane.getSize().width);
-        story.setSize(story.getSize().height,pane1.getSize().width);
+        //result.setSize(result.getSize().height,pane.getSize().width);
+        //story.setSize(story.getSize().height,pane1.getSize().width);
     }
 
     public static void main(String[] args)
@@ -412,8 +412,8 @@ public class Client extends JFrame
                 //Client.this.update(chat.getText());
                 result.append(chat.getText()+"\n");
 
-                result.setSize(result.getSize().height,pane.getSize().width);
-                story.setSize(story.getSize().height,pane1.getSize().width);
+                //result.setSize(result.getSize().height,pane.getSize().width);
+                //story.setSize(story.getSize().height,pane1.getSize().width);
 
                 Client.this.thread.tellServer(chat.getText());
                 if(chat.getText().toLowerCase().equals("exit")){System.exit(0);}

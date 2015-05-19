@@ -378,6 +378,9 @@ public class Client extends JFrame
             }
             else{result.append(arg+"\n");}
         }
+        if(arg.equals(" ")){
+            result.append("\n");
+        }
         story.setCaretPosition(story.getDocument().getLength());
         result.setCaretPosition(result.getDocument().getLength());
         //result.setSize(result.getSize().height,pane.getSize().width);

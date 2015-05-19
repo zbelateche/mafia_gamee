@@ -134,8 +134,8 @@ public class Cohort
             return;
         }
         started = true;
-        maxMafia=2;
-        //maxMafia = (int)((0.25*teamMates.size())+0.5);
+        //maxMafia=2;
+        maxMafia = (int)((0.25*teamMates.size())+0.5);
         isNight = true;
         broadcast(" ");
         broadcast("The game has begun!");
@@ -144,7 +144,7 @@ public class Cohort
         {broadcast(t.getName());}
         broadcast("@It's the first night.");
         broadcast(" ");
-        broadcast(   "@Go kill, mafia!Go investigate, detective! Go save, doctor! Go scramble, Poltergeist"  );
+        broadcast(   "@Go kill, mafia! Go investigate, detective! Go save, doctor! Go scramble, Poltergeist"  );
         broadcast(" ");
         assign();
         listMafia();
@@ -181,7 +181,7 @@ public class Cohort
         //added
         if(recruit==false)
         {
-            broadcast("entered assign mafia.");
+            //broadcast("entered assign mafia.");
             mafia = 0;
             while(mafia < maxMafia)
             {

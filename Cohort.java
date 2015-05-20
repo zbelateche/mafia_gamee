@@ -142,10 +142,11 @@ public class Cohort
         broadcast("Current players:");
         for(ServerThread t : teamMates)
         {broadcast(t.getName());}
+        broadcast(" "); 
         broadcast("@It's the first night.");
-        broadcast(" ");
+        broadcast("@ ");
         broadcast(   "@Go kill, mafia! Go investigate, detective! Go save, doctor! Go scramble, Poltergeist"  );
-        broadcast(" ");
+        broadcast("@ ");
         assign();
         listMafia();
 
@@ -210,14 +211,6 @@ public class Cohort
         }
         //done
         //assign everyone else as a mafia
-        for(ServerThread t : teamMates)
-        {
-            if(!t.isMafia())
-            {
-                t.makeVillager();
-                villager++;
-            }
-        }
 
         //assign doctor 
         ServerThread target = teamMates.get((int)((Math.random()*teamMates.size())));
@@ -242,6 +235,16 @@ public class Cohort
             target = teamMates.get((int)((Math.random()*teamMates.size())));
         }
         target.makeDetective();
+
+        //assign everyone else as a mafia
+        for(ServerThread t : teamMates)
+        {
+            if(!t.isMafia())
+            {
+                t.makeVillager();
+                villager++;
+            }
+        }
     }
 
     public void listMafia()
@@ -250,7 +253,14 @@ public class Cohort
         {
             if(t.isMafia())
             {
-                t.say("Living mafia:");
+                if(mafia>1)
+                {
+                    t.say("Living mafia:");
+                }
+                else if(mafia==1)
+                {
+                    t.say("Right now, you are the only mafia!");
+                }
                 for(ServerThread s : teamMates)
                 {
                     if(s.isMafia())
@@ -378,14 +388,16 @@ public class Cohort
         isDawn=false; 
         broadcast("$day");
         broadcast(" ");
+        broadcast("@ ");
         int rand = (int)(Math.random())*3 + 1;
-        if(!dead.equals("No one")){
+        if(!dead.equals("No one"))
+        {
             if(rand==1)
             {
                 broadcast("@It was a beautiful fall day. " + dead + "  was finishing up at the grocery store, purchasing ingredients for a pumpkin pie they were planning on making that evening. " + dead + " thanked the cashier and headed out of the store. Strangely, the parking lot was pretty much empty and it seemed like all of the lights were out. Out of nowhere, " + dead + "  saw a bright spark and a heard a deafening sound, emanating from the flash. " + dead + " collapsed, suffering a gunshot through the skull, never to bake another pumpkin pie again. Who is responsible for this violent act?");
             }
 
-            if(rand==2)
+            else if(rand==2)
             {
                 broadcast("@It was a Saturday evening, and " + dead + " was out on a date at the new fancy Italian restaurant in town. Rumor has it: the food is to die for. When the waiter placed her lasagna dish in front of them, they couldn’t resist taking a bite. A second later, they fell over dead. The people around called 911 but it was too late. "+ dead + " was eating by themselves, so who could have done it?");
             }
@@ -395,15 +407,14 @@ public class Cohort
                 broadcast("@" + dead + "was camping with some friends in a cabin in Montana. It was getting pretty chilly, so they decided to make a fire. Realizing there wasn’t enough wood, " + dead + "volunteered to go outside to gather some for the fire. Everyone saw " + dead + " go into the woods, but no one saw them come out. Dun Dunn Dunnn. Who dun it? hehe ;)");
             }
         }
-
-        if(dead.equals("No one"))
+        else if(dead.equals("No one"))
         {
             int assign =(int) (Math.random())*3 + 1;
             if(assign==1)
             {
                 broadcast("@It was a beautiful day. A citizen of the town was leaving the local grocery store when they were shot in the parking lot. They were losing a lot of blood, fast. The situation was dire, it looked like that poor citizen would die. Luckily, the doctor happened to be exiting the McDonald’s drive-thru in the same shopping center. The doctor saw the citizen lying in the street, and quickly rushed over to them. The doctor was able to stop the bleeding and take the citizen to the nearest hospital, saving their life.");
             }
-            if(assign==2)
+            else if(assign==2)
             {
                 broadcast("@It was a Saturday evening, and a citizen of the town was out on a date at the new, fancy Italian restaurant in town. Of course, the citizen had to impress their date by ordering the best wine on the menu. The doctor was also dining at the same place and had just exited the restroom in the back when they saw one of the waiters produce a small vial filled with green liquid from the pocket in his apron and proceed to pour the contents into a wine glass through the transparent kitchen door. Recognizing this as an attempted poisoning, the doctor burst through the kitchen door and called attention to the situation. The citizen was the intended recipient of the poison, and if not for the heroic doctor, would surely be dead at this point. The mischievous mafia watched through the tinted windows of their black SUV as the police dragged away the paid waiter. Who are the mafia?");
             }
@@ -412,14 +423,17 @@ public class Cohort
                 broadcast("@A citizen of the town was camping with some friends in a cabin in Montana. It was getting pretty chilly, so they decided to make a fire. Realizing there wasn’t enough wood, the citizen volunteered to go outside to gather some for the fire. Everyone saw the citizen go into the woods, but no one saw them come out. Luckily, the doctor was on their annual hike when they noticed a strange creature in the nearby river. The doctor jumped in and pulled the drowning body onto the river bank. The doctor was able to pump profuse amounts of water from the citizen’s chest, saving their life. How did the citizen end up in the river?");
             }
         }
+        broadcast("@ ");
         if(will != null)
         {
             broadcast("@He/she left a will for you all: " + will   );
         }
+        broadcast("@ ");
         broadcast("Current survivors:");
         for(ServerThread t : teamMates)
         {if(!t.isDead()){broadcast(t.getName());}}
-        broadcast(" ");
+        broadcast(" "); 
+        broadcast("@ ");
         if(villager==0)
         {
             broadcast(  "@All villagers killed. The mafia win!"   );
@@ -440,7 +454,7 @@ public class Cohort
             }
             broadcast(out);
         }
-        broadcast(" ");
+        broadcast("@ ");
         isNight = false;
     }
 
@@ -479,7 +493,7 @@ public class Cohort
         {
             broadcast("He/she left a will for you all: " + will);
         }
-
+        broadcast(" ");
         //broadcast who is alive -> Highlight this 
         broadcast("Current survivors:");
         for(ServerThread t : teamMates)
@@ -504,7 +518,9 @@ public class Cohort
             tellAdmin("@As admin, start the game again with start");
             stop();
         }
-        else{broadcast("It is now night. Go mafia!");}
+        else{
+            broadcast("@ ");
+            broadcast("@It is now night. Go do your thing, special characters!");}
 
         //tell special people to do their thing
         for(ServerThread t : teamMates)
@@ -533,11 +549,11 @@ public class Cohort
         }
         r.out.println("The mafia would like to recruit you. Would you like to accept or deny? Note if you play a special role, you'll have to abandon your position in order to join the mafia");
         r.out.println("$aord: ");
+        r.out.println(" ");
     }
 
     public void recruit(String answer)
     {
-        broadcast("entered recruit");
         if(answer.equals("Accept"))
         {
             r.makeMafia(); 
@@ -560,15 +576,19 @@ public class Cohort
             else
                 villager--;
             r.setMafia(); 
+            r.out.println(" ");
             broadcastM(torecruit+" is now a mafia! The maximum ammount is "+ maxMafia+" mafia.");
             listMafia(); 
+            broadcastM(" ");
 
         }
         else if(answer.equals("Deny"))
         {
+            r.out.println(" ");
             r.out.println("You have chosen to remain your original character.");
             broadcastM(torecruit+" does not want to join your mafia team.");
-
+            broadcastM(" ");
+            r.out.println(" "); 
         }
         else
         {
@@ -593,7 +613,7 @@ public class Cohort
 
         //prompts the detective to do his thing
         if(!investigated && detective==1){
-            broadcast("Hurry up and investigate, detective!");
+            broadcastDe("Hurry up and investigate, detective!");
         }
 
         //have the mafia vote to recruit
@@ -623,8 +643,9 @@ public class Cohort
                     tokill = str;//set the person they want to tokill
                 }
             }
-            broadcastM( "You have agreed to kill "+ tokill+"! Find out if that pesky doctor saved him in the morning!"  );
 
+            broadcastM( "You have agreed to kill "+ tokill+"! Find out if that pesky doctor saved him in the morning!"  );
+            broadcastM(" "); 
         }
         //added
         if((votes==mafia) && (recruit==true) && (mafia+deadMafia)<maxMafia)
@@ -658,7 +679,7 @@ public class Cohort
 
         //prompts the detective to do his thing
         if(!investigated && detective==1){
-            broadcast("Hurry up and investigate, detective!");
+            broadcastDe("Hurry up and investigate, detective!");
         }
 
         //have the mafia agree on someone to kill
@@ -768,10 +789,17 @@ public class Cohort
                 //added
 
                 if(t.isMafia())
-                    thread.say( "You found a mafia! Now convince the other villagers!"  );
-                else
-                    thread.say("This person is either not the mafia or dead. See you in the morning!"  );
+                {
 
+                    thread.say( "You found a mafia! Now convince the other villagers!"  );
+                    thread.say(" ");
+                }
+                else
+                {
+
+                    thread.say("This person is either not the mafia or dead. See you in the morning!"  );
+                    thread.say(" ");
+                }
             }
         }
         investigated=true;
@@ -790,7 +818,8 @@ public class Cohort
         if(thread.isScrambled())
         {
             boolean ok = false;
-            String orig = tbk;           
+            String orig = tbk;
+            broadcast(thread.getName() + " voted for " + tbk + "!");
             while(!ok){
                 int voteNum = (int)(Math.random()*(teamMates.size()-numDead));
                 ServerThread pos = teamMates.get(voteNum);
@@ -798,7 +827,6 @@ public class Cohort
                 if(!pos.isDead() && !tbk.equals(orig))
                     ok = true;
             }
-            broadcast(thread.getName() + " voted for " + tbk + "!");
         }
         boolean exists = false;
         for(ServerThread t : teamMates)
@@ -806,7 +834,7 @@ public class Cohort
             if(tbk.toLowerCase().equals(t.getName().toLowerCase())){exists = true;}
         }
         if(!exists){return false;}
-        if(votes<villager+mafia && voted.indexOf(thread)==-1)
+        if(votes<(villager+mafia) && voted.indexOf(thread)==-1)
         {
             for(ServerThread t : teamMates)
             {
@@ -817,7 +845,7 @@ public class Cohort
             votes++;
             voted.add(thread);
         }
-        if(votes == villager + mafia)
+        if(votes == (villager + mafia))
         {
             int min = 0;
             String kill = new String();
@@ -869,7 +897,7 @@ public class Cohort
             voted = new ArrayList<ServerThread>();
 
             if(!two){night(kill, killWill);}
-            else{night("@Vote tied. Nobody"   , null);}
+            else{night("@Vote tied. Nobody", null);}
 
             return true;
         }

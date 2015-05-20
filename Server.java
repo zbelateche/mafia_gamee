@@ -1,4 +1,3 @@
-
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -45,12 +44,11 @@ class ServerThread implements Runnable {
     }
 
     public void intro(){
-        try {this.out.println(" ");
+        try {
             this.out.println("Welcome to Online Mafia!");
             this.out.println("Enter your name:");
-            this.out.println(" ");
-
             this.name = this.in.readLine();
+            this.out.println(" "); 
             if (name == null) {
                 this.in.close();
                 this.out.close();
@@ -66,22 +64,20 @@ class ServerThread implements Runnable {
         try {
             admin=false;
             this.out.println("$night");
-            this.out.println(" ");
+            this.out.println("@ ");
             this.out.println("@Active games:");
-            this.out.println(" ");
+            
             for(Cohort t: ServerThread.cohorts)
             {
                 this.out.println("@"+t.getID());
             }
+            this.out.println("@ "); 
             boolean horted = false;
             if(ServerThread.cohorts.size()>0){this.out.println(" ");}
             horting: while(!horted){
                 this.out.println("To join a game, use the join command: 'join game_name'");
-                this.out.println(" ");
                 this.out.println("To create a new game, use the create command: 'create game_name'");
-                this.out.println(" ");
                 this.out.println("To exit, type 'exit'");
-                this.out.println(" ");
 
                 String cmd = this.in.readLine();
                 if (cmd == null) {
@@ -107,6 +103,7 @@ class ServerThread implements Runnable {
                     {
                         if(t.getID().toLowerCase().equals(cmds[1].toLowerCase()))
                         {
+                            this.out.println(" "); 
                             this.out.println("Enter Password:");
                             String pass = this.in.readLine();
                             if(pass.equals(t.pass)){
@@ -132,7 +129,7 @@ class ServerThread implements Runnable {
                         }
                     }
                     this.out.println("@That game_name or password is incorrect.");
-                    this.out.println(" ");
+                    this.out.println("@ ");
                 }
                 else if(cmds[0].toLowerCase().equals("create"))
                 {
@@ -147,6 +144,7 @@ class ServerThread implements Runnable {
                     }
                     if(!another)
                     {
+                        this.out.println(" ");
                         this.out.println("Choose a password:");
                         String pass = this.in.readLine();
                         cohort = new Cohort(cmds[1], pass);
@@ -156,6 +154,7 @@ class ServerThread implements Runnable {
                         dead = false;
                         admin = true;
                         //added
+                        this.out.println(" ");
                         this.out.println("Choose to allow the computer to randomly select all mafia or allow the first mafia to recruit the rest: 'random' or 'recruit'");
                         String selection= this.in.readLine();
                         this.cohort=cohort;
@@ -175,7 +174,7 @@ class ServerThread implements Runnable {
             {
                 this.out.println("@As an admin, kick players using the kick command: 'kick player_name'");
                 this.out.println("@Start the game with 'start'");
-                this.out.println(" ");
+                this.out.println("@ ");
             }
             /**
             this.out.println("Enter a will(this can be changed when the game starts):");
@@ -585,7 +584,7 @@ class ServerThread implements Runnable {
     {
         detective=true; 
         this.out.println( "@You're the detective! At night, you can perform your investigations.");
-        this.out.println(" ");
+        this.out.println("@ ");
         cohort.detective++; 
     }
 
@@ -602,10 +601,10 @@ class ServerThread implements Runnable {
         if(cohort.recruit==true && (cohort.mafia +cohort.deadMafia)<cohort.maxMafia)
         {this.out.println("@Tonight, you'll get to recruit a mafia onto your team. They have the opportunity to join your team or remain their character."); 
         }
-        this.out.println("@If there is more than one mafia, at night, you can talk to them at night!");
+        this.out.println("@If there is more than one mafia, you can talk to them at night!");
         this.out.println("@If your votes don't agree with the other mafia, your target will be randomly choosen.");
         //done
-        this.out.println(" ");
+        this.out.println("@ ");
     }
 
     public void polterate()
@@ -614,7 +613,7 @@ class ServerThread implements Runnable {
         this.out.println( "@You're the Poltergeist. Your job is simply to make the villagers' job more difficult every day."  );
         this.out.println("@Each night, you make someone's vote random!");
         this.out.println("@While you don't actually have anyone to talk to, talking to yourself would complete the illusion of a mad ghost.");
-        this.out.println(" ");
+        this.out.println("@ ");
     }
 
     public void makeVillager()
@@ -624,7 +623,7 @@ class ServerThread implements Runnable {
         {
             this.out.println( "@You're a villager.");
             this.out.println("@Each morning, you vote for who you think is the mafia!");
-            this.out.println(" ");
+            this.out.println("@ ");
         }
     }
 

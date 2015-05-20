@@ -819,7 +819,7 @@ public class Cohort
         {
             boolean ok = false;
             String orig = tbk;
-            broadcast(thread.getName() + " voted for " + tbk + "!");
+            
             while(!ok){
                 int voteNum = (int)(Math.random()*(teamMates.size()-numDead));
                 ServerThread pos = teamMates.get(voteNum);
@@ -827,6 +827,8 @@ public class Cohort
                 if(!pos.isDead() && !tbk.equals(orig))
                     ok = true;
             }
+            
+            broadcast(thread.getName() + " voted for " + tbk + "!");
         }
         boolean exists = false;
         for(ServerThread t : teamMates)

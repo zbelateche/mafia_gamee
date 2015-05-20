@@ -514,7 +514,7 @@ class ServerThread implements Runnable {
                 {
                     t.scrambled = true;
                     cohort.someScram = true;
-                    this.out.println( "You have scrambled"+t.getName()+"!");
+                    this.out.println( "You have scrambled "+t.getName()+"!");
                     this.out.println("See you in the morning!" );
                     this.out.println(" ");
                     for(ServerThread cl: cohort.teamMates)

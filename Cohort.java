@@ -379,19 +379,21 @@ public class Cohort
         broadcast("$day");
         broadcast(" ");
         int rand = (int)(Math.random())*3 + 1;
-        if(rand==1)
-        {
-            broadcast("@It was a beautiful fall day. " + dead + "  was finishing up at the grocery store, purchasing ingredients for a pumpkin pie they were planning on making that evening. " + dead + " thanked the cashier and headed out of the store. Strangely, the parking lot was pretty much empty and it seemed like all of the lights were out. Out of nowhere, " + dead + "  saw a bright spark and a heard a deafening sound, emanating from the flash. " + dead + " collapsed, suffering a gunshot through the skull, never to bake another pumpkin pie again. Who is responsible for this violent act?");
-        }
+        if(!dead.equals("No one")){
+            if(rand==1)
+            {
+                broadcast("@It was a beautiful fall day. " + dead + "  was finishing up at the grocery store, purchasing ingredients for a pumpkin pie they were planning on making that evening. " + dead + " thanked the cashier and headed out of the store. Strangely, the parking lot was pretty much empty and it seemed like all of the lights were out. Out of nowhere, " + dead + "  saw a bright spark and a heard a deafening sound, emanating from the flash. " + dead + " collapsed, suffering a gunshot through the skull, never to bake another pumpkin pie again. Who is responsible for this violent act?");
+            }
 
-        if(rand==2)
-        {
-            broadcast("@It was a Saturday evening, and " + dead + " was out on a date at the new fancy Italian restaurant in town. Rumor has it: the food is to die for. When the waiter placed her lasagna dish in front of them, they couldn’t resist taking a bite. A second later, they fell over dead. The people around called 911 but it was too late. "+ dead + " was eating by themselves, so who could have done it?");
-        }
+            if(rand==2)
+            {
+                broadcast("@It was a Saturday evening, and " + dead + " was out on a date at the new fancy Italian restaurant in town. Rumor has it: the food is to die for. When the waiter placed her lasagna dish in front of them, they couldn’t resist taking a bite. A second later, they fell over dead. The people around called 911 but it was too late. "+ dead + " was eating by themselves, so who could have done it?");
+            }
 
-        else
-        {
-            broadcast("@" + dead + "was camping with some friends in a cabin in Montana. It was getting pretty chilly, so they decided to make a fire. Realizing there wasn’t enough wood, " + dead + "volunteered to go outside to gather some for the fire. Everyone saw " + dead + " go into the woods, but no one saw them come out. Dun Dunn Dunnn. Who dun it? hehe ;)");
+            else
+            {
+                broadcast("@" + dead + "was camping with some friends in a cabin in Montana. It was getting pretty chilly, so they decided to make a fire. Realizing there wasn’t enough wood, " + dead + "volunteered to go outside to gather some for the fire. Everyone saw " + dead + " go into the woods, but no one saw them come out. Dun Dunn Dunnn. Who dun it? hehe ;)");
+            }
         }
 
         if(dead.equals("No one"))

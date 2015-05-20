@@ -95,8 +95,16 @@ public class Client extends JFrame
         //Necessary initialization code
         setTitle(TITLE);
         setSize(WIDTH, HEIGHT);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        //setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                    thread.tellServer("exit");
+                    System.exit(0);
+
+                }
+            });
         //Get content pane
         content=getContentPane();
         content.setBackground(Color.blue.darker().darker());

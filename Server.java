@@ -307,10 +307,13 @@ class ServerThread implements Runnable {
                     if(fromClient.toLowerCase().equals("exit"))
                     {
                         cohort.broadcast(name+" has exited.");
+                        cohort.remove(this);
+                        this.cohort=null;
                         this.out.println("You have exited the game."); 
                         this.in.close();
                         this.out.close();
                         this.socket.close();
+
                         return;
                     }
                     cohort.remove(this);

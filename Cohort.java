@@ -148,7 +148,6 @@ public class Cohort
         broadcast(" ");
         assign();
         listMafia();
-        
 
         String out = "$kill:";
         for(ServerThread a : getPlayers()){
@@ -378,12 +377,6 @@ public class Cohort
     {
         isDawn=false; 
         broadcast("$day");
-        String out = "$votes:";
-        for(ServerThread a : getPlayers()){
-            if(!a.isDead()){out+=" "+a.getName();}
-        }
-        broadcast(out);
-
         broadcast(" ");
         int rand = (int)(Math.random())*3 + 1;
         if(rand==1)
@@ -438,7 +431,13 @@ public class Cohort
             tellAdmin("@As admin, start the game again with start");
             stop();
         }
-        else{broadcast("@It is now morning. Vote to execute a mafia!");}
+        else{broadcast("@It is now morning. Vote to execute a mafia!");
+            String out = "$votes:";
+            for(ServerThread a : getPlayers()){
+                if(!a.isDead()){out+=" "+a.getName();}
+            }
+            broadcast(out);
+        }
         broadcast(" ");
         isNight = false;
     }
